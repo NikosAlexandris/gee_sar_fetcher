@@ -29,6 +29,7 @@ def fetch(
     ascending: bool = True,
     scale: int = 20,
     n_jobs: int = 8
+    crs: str = 'EPSG:4326',
 ):
     '''Fetches SAR data in the form of a dictionnary with image data as well as timestamps
 
@@ -100,7 +101,7 @@ def fetch(
         )
         _ = (sentinel_1_roi
                   .select("VV")
-                  .getRegion(polygon, scale=scale)
+                  .getRegion(polygon, scale=scale, crs=crs)
                   .getInfo()
         )
 
@@ -134,7 +135,8 @@ def fetch(
                 end_date=end_date,
                 geometry=polygon,
                 orbit=orbit,
-                scale=scale
+                scale=scale,
+                crs=crs,
             )
             vals.extend(val)
 
