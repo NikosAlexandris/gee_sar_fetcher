@@ -3,14 +3,7 @@ from geesarfetcher.constants import VV, VH, IW, ASCENDING
 
 __all__ = ["fetch_sentinel1_data"]
 
-def fetch_sentinel1_data(
-        start_date,
-        end_date,
-        geometry,
-        scale,
-        crs,
-        pass_direction=ASCENDING,
-    ):
+def fetch_sentinel1_data(start_date, end_date, geometry, scale, crs, orbit=ASCENDING):
     '''
     Retrieves and queries ImageCollection using input parameters and return data as a tuple of header and values.
 
