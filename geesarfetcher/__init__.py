@@ -37,9 +37,9 @@ def fetch(
     start_date: datetime = date.today()-timedelta(days=365),
     end_date: datetime = date.today(),
     ascending: bool = True,
-    scale: int = 20,
-    n_jobs: int = 8
+    scale: int = 10,
     crs: str = 'EPSG:4326',
+    n_jobs: int = 1,
 ):
     '''Fetches SAR data in the form of a dictionnary with image data as well as timestamps
 
