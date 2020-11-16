@@ -3,7 +3,7 @@ from geesarfetcher.constants import VV, VH, IW, ASCENDING
 
 __all__ = ["fetch_sentinel1_data"]
 
-def fetch_sentinel1_data(start_date, end_date, geometry, scale, orbit=ASCENDING):
+def fetch_sentinel1_data(start_date, end_date, geometry, scale, crs, orbit=ASCENDING):
     '''
     Retrieves and queries ImageCollection using input parameters and return data as a tuple of header and values.
 
@@ -34,12 +34,12 @@ def fetch_sentinel1_data(start_date, end_date, geometry, scale, orbit=ASCENDING)
     )
     val_vv = (sentinel_1_roi
               .select(VV)
-              .getRegion(geometry, scale=scale)
+              .getRegion(geometry, scale=scale, crs=crs)
               .getInfo()
     )
     val_vh = (sentinel_1_roi
               .select(VH)
-              .getRegion(geometry, scale=scale)
+              .getRegion(geometry, scale=scale, crs=crs)
               .getInfo()
     )
     val_header = val_vv[0][1:] + [VH]
