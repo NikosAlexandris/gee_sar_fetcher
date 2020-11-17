@@ -1,4 +1,4 @@
-def populate_coordinates_dictionary(dictified_values, coordinates_dictionary):
+def populate_coordinates_dictionary(dictified_values):
     """
     The dictionnary coordinates_dictionary' will be populated (or updated) with
     values from the 'dictified_values' dictionnary
@@ -16,6 +16,7 @@ def populate_coordinates_dictionary(dictified_values, coordinates_dictionary):
     -------
     coordinates_dictionary
     """
+    coordinates_dictionary = {}
     for entry in dictified_values:
         lat = entry["latitude"]
         lon = entry["longitude"]
