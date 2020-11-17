@@ -33,18 +33,20 @@ def fetch_sentinel1_data(
         val_header corresponds to the ``list of str`` describing the fields of the val array. The val array is a ``list`` of data records, each represented as a ``list`` of the same size as the val_header array.
 
     '''
-    sentinel_1_roi = filter_sentinel1_data(
+    filtered_sentinel1_data = filter_sentinel1_data(
             start_date=start_date,
             end_date=end_date,
             geometry=geometry,
             pass_direction=pass_direction
     )
-    val_vv = (sentinel_1_roi
+
+    val_vv = (filtered_sentinel1_data
               .select(VV)
               .getRegion(geometry, scale=scale, crs=crs)
               .getInfo()
     )
-    val_vh = (sentinel_1_roi
+
+    val_vh = (filtered_sentinel1_data
               .select(VH)
               .getRegion(geometry, scale=scale, crs=crs)
               .getInfo()
