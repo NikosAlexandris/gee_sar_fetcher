@@ -20,7 +20,6 @@ from .utils import retrieve_max_pixel_count_from_pattern
 from .utils import cmp_coords
 from .utils import get_date_interval_array
 from .constants import ASCENDING, DESCENDING
-from .filter import filter_sentinel1_data
 from .fetcher import fetch_sentinel1_data
 from .coordinates import populate_coordinates_dictionary
 
