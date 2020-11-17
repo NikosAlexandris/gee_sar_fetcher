@@ -3,7 +3,14 @@ from geesarfetcher.constants import VV, VH, IW, ASCENDING
 
 __all__ = ["fetch_sentinel1_data"]
 
-def fetch_sentinel1_data(start_date, end_date, geometry, scale, crs, orbit=ASCENDING):
+def fetch_sentinel1_data(
+        start_date,
+        end_date,
+        geometry,
+        scale,
+        crs,
+        pass_direction=ASCENDING,
+    ):
     '''
     Retrieves and queries ImageCollection using input parameters and return data as a tuple of header and values.
 
@@ -17,8 +24,8 @@ def fetch_sentinel1_data(start_date, end_date, geometry, scale, crs, orbit=ASCEN
         Geometry object defining the area of process
     scale : int
         Scale parameters of the getRegion() function. Defaulting at ``20``, change it to change the scale of the final data points. The highest, the lower the spatial resolution. Should be at least ``10``.
-    orbit : str, optional
-        Defines the orbit to set for the data retrieval process
+    pass_direction : str, optional
+        Defines the pass direction to set for the data retrieval process
 
     Returns
     -------
@@ -30,7 +37,7 @@ def fetch_sentinel1_data(start_date, end_date, geometry, scale, crs, orbit=ASCEN
             start_date=start_date,
             end_date=end_date,
             geometry=geometry,
-            orbit=orbit
+            pass_direction=pass_direction
     )
     val_vv = (sentinel_1_roi
               .select(VV)

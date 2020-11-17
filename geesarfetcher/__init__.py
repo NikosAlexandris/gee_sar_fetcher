@@ -132,7 +132,7 @@ def fetch(
             "coords must be None if top_left and bottom_right are not None.")
 
     date_intervals = get_date_interval_array(start_date, end_date)
-    orbit = ASCENDING if ascending else DESCENDING
+    pass_direction = ASCENDING if ascending else DESCENDING
 
     if (top_left is not None):
         list_of_coordinates = [make_polygon(top_left, bottom_right)]
@@ -147,7 +147,7 @@ def fetch(
             end_date=date_intervals[-1][1],
             geometry=polygon,
             scale=scale,
-            orbit=orbit,
+            pass_direction=pass_direction,
         )
     except Exception as e:
         # If the area is found to be too big
@@ -169,13 +169,13 @@ def fetch(
     ###################################
     print(f"Region sliced in {len(list_of_coordinates)} subregions and {len(date_intervals)} time intervals.")
 
-    def _get_zone_between_dates(start_date, end_date, polygon, scale, orbit):
+    def _get_zone_between_dates(start_date, end_date, polygon, scale, crs, pass_direction):
         try:
             val_header, val = fetch_sentinel1_data(
                 start_date=start_date,
                 end_date=end_date,
                 geometry=polygon,
-                orbit=orbit,
+                pass_direction=pass_direction,
                 scale=scale,
                 crs=crs,
             )
@@ -194,7 +194,7 @@ def fetch(
         ])
         # Fill vals with values.
         # TODO: Evaluate eventuality to remove shared memory requirement and to exploit automatic list building from Joblib
-        Parallel(n_jobs=n_jobs, require='sharedmem')(delayed(_get_zone_between_dates)(sub_start_date, sub_end_date, polygon, scale, orbit) for sub_start_date, sub_end_date in date_intervals)
+        Parallel(n_jobs=n_jobs, require='sharedmem')(delayed(_get_zone_between_dates)(sub_start_date, sub_end_date, polygon, scale, crs, pass_direction) for sub_start_date, sub_end_date in date_intervals)
 
         dictified_vals = [dict(zip(headers, values)) for values in vals]
         per_coord_dict = populate_coordinates_dictionary(
