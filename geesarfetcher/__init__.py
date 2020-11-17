@@ -170,8 +170,8 @@ def fetch(
     ## FOR EACH DATE INTERVAL        ##
     ###################################
     print(f'Region sliced in '
-            '{len(list_of_coordinates)} subregions '
-            'and {len(date_intervals)} time intervals.'
+           '{len(list_of_coordinates)} subregions '
+           'and {len(date_intervals)} time intervals.'
     )
     def _get_zone_between_dates(start_date, end_date, polygon, scale, crs, pass_direction):
         try:
