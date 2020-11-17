@@ -107,7 +107,7 @@ def cmp_coords(a, b):
 
     Parameters
     ----------
-    a : dict 
+    a : dict
         dict with keys ``"lon"`` and ``"lat"``
     b : dict
         dict with keys ``"lon"`` and ``"lat"``
