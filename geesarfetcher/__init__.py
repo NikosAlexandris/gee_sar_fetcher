@@ -146,6 +146,7 @@ def fetch(
             end_date=date_intervals[-1][1],
             geometry=polygon,
             scale=scale,
+            crs=crs,
             pass_direction=pass_direction,
         )
     except Exception as e:
