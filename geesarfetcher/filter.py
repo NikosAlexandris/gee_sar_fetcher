@@ -3,10 +3,10 @@ from geesarfetcher.constants import VV, VH, IW
 from geesarfetcher.constants import ASCENDING
 import ee
 
-def filter_sentinel1_data(start_date, end_date, geometry, orbit=ASCENDING):
+def filter_sentinel1_data(start_date, end_date, geometry, pass_direction=ASCENDING):
     '''Filters Sentinel-1 products to get images collected in interferometric
     wide swath mode (IW) and on i) a date range, ii) a geometry and iii)
-    ascending or descending orbit.
+    ascending or descending orbit (pass direction).
 
     Parameters
     ----------
@@ -16,8 +16,8 @@ def filter_sentinel1_data(start_date, end_date, geometry, orbit=ASCENDING):
         str following the pattern ``'yyyy-mm-dd'`` describing the end date of the time interval
     geometry : ee.Geometry
         Geometry object defining the area of process
-    orbit : str, optional
-        Defines the orbit to set for the data retrieval process
+    pass_direction : str, optional
+        Defines the pass_direction to set for the data retrieval process
 
     Returns:
     --------
@@ -30,7 +30,7 @@ def filter_sentinel1_data(start_date, end_date, geometry, orbit=ASCENDING):
                       .filter(ee.Filter.listContains('transmitterReceiverPolarisation', VV))
                       .filter(ee.Filter.listContains('transmitterReceiverPolarisation', VH))
                       .filter(ee.Filter.eq('instrumentMode', IW))
-                      .filter(ee.Filter.eq('orbitProperties_pass', orbit))
+                      .filter(ee.Filter.eq('orbitProperties_pass', pass_direction))
                       .filter(ee.Filter.eq('resolution_meters', 10))
     )
     return filtered_data
