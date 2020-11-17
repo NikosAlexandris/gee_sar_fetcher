@@ -138,7 +138,7 @@ def fetch(
     # retrieving the number of pixels per image
     try:
         polygon = ee.Geometry.Polygon(list_of_coordinates)
-        sentinel_1_roi = filter_sentinel1_data(
+        sentinel_1_roi = fetch_sentinel1_data(
             start_date=date_intervals[0][0],
             end_date=date_intervals[-1][1],
             geometry=polygon,
