@@ -212,7 +212,6 @@ def fetch(
                 for j in range(len(pixel_values[i]['timestamps']))
             ]
     )
-<<<<<<< HEAD
 
     # Creating matrix of coordinates
     lats, lons = tuple(zip(*[(p["lat"], p["lon"]) for p in pixel_values]))
@@ -233,15 +232,6 @@ def fetch(
     print(f"Generating image of shape {height, width}")
     for p in tqdm(pixel_values):
         x, y = lats_dict[p["lat"]], lons_dict[p["lon"]]
-||||||| parent of cfd63c8... Apply some formatting, remove 'per_coord_dict = {}'
-    width, height = define_image_shape(pixel_values)
-    print(f"Generating image of shape {height, width}")
-    def _update_img(pixel_value):
-=======
-    width, height = define_image_shape(pixel_values)
-    print(f"Generating image of shape (width x height) {width} x {height}")
-    def _update_img(pixel_value):
->>>>>>> cfd63c8... Apply some formatting, remove 'per_coord_dict = {}'
         vv = []
         vh = []
         for timestamp in timestamps:
