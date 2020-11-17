@@ -13,6 +13,9 @@ from joblib import Parallel, delayed
 import os
 
 # LOCAL IMPORTS
+from .messages import MESSAGE_NO_BANDS_IN_COLLECTION
+from .messages import VALUE_ERROR_NO_BANDS_IN_COLLECTION
+from .messages import VALUE_ERROR_NO_COORDINATES
 from .utils import make_polygon
 from .utils import tile_coordinates
 from .utils import define_image_shape
@@ -95,7 +98,6 @@ def fetch(
                 Dictionnary describing data for each axis of the stack and the
                 coordinates
     '''
-
     assert(coords is None or (
         (
             type(coords) == list
@@ -124,11 +126,9 @@ def fetch(
     assert(end_date > start_date)
 
     if (top_left is not None
-            and bottom_right is not None
-            and coords is not None
-    ):
-        raise ValueError(
-            "coords must be None if top_left and bottom_right are not None.")
+        and bottom_right is not None
+        and coords is not None):
+        raise ValueError(VALUE_ERROR_NO_COORDINATES)
 
     date_intervals = get_date_interval_array(start_date, end_date)
     pass_direction = ASCENDING if ascending else DESCENDING
@@ -150,23 +150,28 @@ def fetch(
         )
     except Exception as e:
         # If the area is found to be too big
-        if (str(e) == "ImageCollection.getRegion: No bands in collection."):
-            raise ValueError(
-                "No bands found in collection. Orbit incorrect for localisation, please visit https://sentinel.esa.int/web/sentinel/missions/sentinel-1/observation-scenario for more info.")
+        if (str(e) == MESSAGE_NO_BANDS_IN_COLLECTION):
+            raise ValueError(VALUE_ERROR_NO_BANDS_IN_COLLECTION)
         total_count_of_pixels = retrieve_max_pixel_count_from_pattern(str(e))
         if top_left is not None:
             list_of_coordinates = tile_coordinates(
-                total_count_of_pixels, (top_left, bottom_right))
+                    total_count_of_pixels,
+                    (top_left, bottom_right)
+            )
         else:
             list_of_coordinates = tile_coordinates(
-                total_count_of_pixels, coords)
+                    total_count_of_pixels,
+                    coords
+            )
 
     ###################################
     ## RETRIEVING COORDINATES VALUES ##
     ## FOR EACH DATE INTERVAL        ##
     ###################################
-    print(f"Region sliced in {len(list_of_coordinates)} subregions and {len(date_intervals)} time intervals.")
-
+    print(f'Region sliced in '
+            '{len(list_of_coordinates)} subregions '
+            'and {len(date_intervals)} time intervals.'
+    )
     def _get_zone_between_dates(start_date, end_date, polygon, scale, crs, pass_direction):
         try:
             val_header, val = fetch_sentinel1_data(
@@ -184,10 +189,10 @@ def fetch(
         except Exception as e:
             pass
 
-    for c in tqdm(list_of_coordinates):
+    for coordinates in tqdm(list_of_coordinates):
         vals = []
         headers = []
-        polygon = ee.Geometry.Polygon([c])
+        polygon = ee.Geometry.Polygon([coordinates])
         # Fill vals with values.
         # TODO: Evaluate eventuality to remove shared memory requirement and to exploit automatic list building from Joblib
         Parallel(n_jobs=n_jobs, require='sharedmem')(delayed(_get_zone_between_dates)(sub_start_date, sub_end_date, polygon, scale, crs, pass_direction) for sub_start_date, sub_end_date in date_intervals)
@@ -201,7 +206,6 @@ def fetch(
     ## BUILDING TEMPORAL IMAGES ##
     ##############################
 
-
     pixel_values = [per_coord_dict[k] for k in per_coord_dict.keys()]
     cmp_coordinates = cmp_to_key(cmp_coords)
     pixel_values.sort(key=cmp_coordinates)  # sorting pixels by latitude then longitude
@@ -213,25 +217,33 @@ def fetch(
             ]
     )
 
-    # Creating matrix of coordinates
-    lats, lons = tuple(zip(*[(p["lat"], p["lon"]) for p in pixel_values]))
-
-    unique_lats, lats_count = np.unique(lats, return_counts=True)
-    unique_lats = unique_lats[::-1]
-    lats_dict = {unique_lats[i]: i for i in range(len(unique_lats))}
-
-    unique_lons, lons_count = np.unique(lons, return_counts=True)
-    lons_dict = {unique_lons[i]: i for i in range(len(unique_lons))}
-
-    width, height = len(unique_lons), len(unique_lats)
-    coordinates = [[lat, lon] for lon in unique_lons for lat in unique_lats]
+    latitudes, longitudes = tuple(
+                                    zip(*[(p["lat"], p["lon"])
+                                    for p in pixel_values])
+                            )
+    unique_latitudes = np.unique(latitudes)
+    unique_latitudes = unique_latitudes[::-1]
+    latitudes_dictionary = {
+            unique_latitudes[i]: i
+            for i in range(len(unique_latitudes))
+    }
+    unique_longitudes = np.unique(longitudes)
+    longitudes_dictionary = {
+            unique_longitudes[i]: i
+            for i in range(len(unique_longitudes))
+    }
+    coordinates = [
+                    [latitude, longitude]
+                    for longitude in unique_longitudes
+                    for latitude in unique_latitudes
+                ]
     coordinates = np.array(coordinates).reshape(height, width, 2)
-
-    img = np.full((height, width, 2, len(timestamps)),fill_value=np.nan)
+    width, height = len(unique_longitudes), len(unique_latitudes)
+    image = np.full((height, width, 2, len(timestamps)), fill_value=np.nan)
 
     print(f"Generating image of shape {height, width}")
     for p in tqdm(pixel_values):
-        x, y = lats_dict[p["lat"]], lons_dict[p["lon"]]
+        x, y = latitudes_dictionary[p["lat"]], longitudes_dictionary[p["lon"]]
         vv = []
         vh = []
         for timestamp in timestamps:
@@ -244,8 +256,8 @@ def fetch(
             vh.append(np.nanmean(
                 np.array(p["VH"], dtype=float)[indexes]))
 
-        img[x, y, 0, :] = vv
-        img[x, y, 1, :] = vh
+        image[x, y, 0, :] = vv
+        image[x, y, 1, :] = vh
 
     # we aim to find the couple of (lats, lons) that generates the biggest covered area mongst the retrieved data (pixel wise)
 
@@ -257,7 +269,7 @@ def fetch(
     #coordinates[:,:,1] = lons
 
     return {
-        "stack": img,
+        "stack": image,
         "timestamps": timestamps,
         "coordinates": coordinates,
         "metadata": {
@@ -274,4 +286,3 @@ def fetch(
             }
         }
     }
-
