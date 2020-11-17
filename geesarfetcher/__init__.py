@@ -20,7 +20,7 @@ from .utils import make_polygon
 from .utils import tile_coordinates
 from .utils import define_image_shape
 from .utils import retrieve_max_pixel_count_from_pattern
-from .utils import cmp_coords
+from .utils import compare_coordinates_dictionaries
 from .utils import get_date_interval_array
 from .constants import ASCENDING, DESCENDING
 from .fetcher import fetch_sentinel1_data
@@ -207,8 +207,8 @@ def fetch(
     ##############################
 
     pixel_values = [per_coord_dict[k] for k in per_coord_dict.keys()]
-    cmp_coordinates = cmp_to_key(cmp_coords)
-    pixel_values.sort(key=cmp_coordinates)  # sorting pixels by latitude then longitude
+    coordinates_dictionaries_comparison = cmp_to_key(compare_coordinates_dictionaries)
+    pixel_values.sort(key=coordinates_dictionaries_comparison)  # sorting pixels by latitude then longitude
     timestamps = np.unique(
             [
                 datetime.fromtimestamp(pixel_values[i]['timestamps'][j]).date()

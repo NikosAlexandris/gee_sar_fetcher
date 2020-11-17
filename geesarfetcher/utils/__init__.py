@@ -101,9 +101,10 @@ def retrieve_max_pixel_count_from_pattern(error_str):
         raise ValueError("No max pixels value found")
 
 
-def cmp_coords(a, b):
+def compare_coordinates_dictionaries(a, b):
     '''
-    Given two coordinates dict a and b, compare which one is closer to the North-Eastern direction
+    Given two coordinates dictionaries a and b, compare which one is closer to
+    the North-Eastern direction
 
     Parameters
     ----------
