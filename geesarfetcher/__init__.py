@@ -158,8 +158,6 @@ def fetch(
             list_of_coordinates = tile_coordinates(
                 total_count_of_pixels, coords)
 
-    per_coord_dict = {}
-
     ###################################
     ## RETRIEVING COORDINATES VALUES ##
     ## FOR EACH DATE INTERVAL        ##
@@ -187,18 +185,13 @@ def fetch(
     for c in tqdm(list_of_coordinates):
         vals = []
         headers = []
-        polygon = ee.Geometry.Polygon([
-            c
-        ])
+        polygon = ee.Geometry.Polygon([c])
         # Fill vals with values.
         # TODO: Evaluate eventuality to remove shared memory requirement and to exploit automatic list building from Joblib
         Parallel(n_jobs=n_jobs, require='sharedmem')(delayed(_get_zone_between_dates)(sub_start_date, sub_end_date, polygon, scale, crs, pass_direction) for sub_start_date, sub_end_date in date_intervals)
 
         dictified_vals = [dict(zip(headers, values)) for values in vals]
-        per_coord_dict = populate_coordinates_dictionary(
-                dictified_values=dictified_vals,
-                coordinates_dictionary=per_coord_dict,
-        )
+        per_coord_dict = populate_coordinates_dictionary(dictified_values=dictified_vals)
 
     # per_coord_dict is a dictionnary matching to each coordinate key its values through time as well as its timestamps
 
@@ -217,7 +210,7 @@ def fetch(
             ]
     )
     width, height = define_image_shape(pixel_values)
-    print(f"Generating image of shape {height, width}")
+    print(f"Generating image of shape (width x height) {width} x {height}")
     def _update_img(pixel_value):
         vv = []
         vh = []
