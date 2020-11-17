@@ -13,6 +13,7 @@ from joblib import Parallel, delayed
 import os
 
 # LOCAL IMPORTS
+from .constants import ASCENDING, DESCENDING
 from .messages import MESSAGE_NO_BANDS_IN_COLLECTION
 from .messages import VALUE_ERROR_NO_BANDS_IN_COLLECTION
 from .messages import VALUE_ERROR_NO_COORDINATES
@@ -22,7 +23,6 @@ from .utils import define_image_shape
 from .utils import retrieve_max_pixel_count_from_pattern
 from .utils import compare_coordinates_dictionaries
 from .utils import get_date_interval_array
-from .constants import ASCENDING, DESCENDING
 from .fetcher import fetch_sentinel1_data
 from .coordinates import populate_coordinates_dictionary
 
