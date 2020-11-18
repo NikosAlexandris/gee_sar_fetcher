@@ -308,12 +308,8 @@ def compose(
         # parallel_pool = Parallel(n_jobs=number_of_cpu, require='sharedmem')
         # parallel_pool(delayed_functions)
 
-        print("# of values:", len(vals))
-        print("# of headers:", len(headers))
         dictified_vals = [dict(zip(headers, values)) for values in vals]
-        print("# of dictified_vals:", len(dictified_vals))
-        per_coord_dict = populate_coordinates_dictionary(dictified_values=dictified_vals)
-        print("# of per_coord_dict:", len(per_coord_dict))
+        per_coord_dict = composite_coordinates_dictionary(dictified_values=dictified_vals)
 
     # per_coord_dict is a dictionnary matching to each coordinate key its values through time as well as its timestamps
 
