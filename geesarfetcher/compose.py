@@ -10,12 +10,12 @@ def compose(
     statistic: str = 'mean',
     n_jobs: int = 1,
 ):
-    '''Fetches SAR data in the form of a dictionnary with image data as well as timestamps
+    '''Fetches a composite of SAR data in the form of a dictionnary with image data as well as timestamps
 
     Parameters
     ----------
     top_left : tuple of float, optional
-        Top left coordinates (lon, lat) of the Region 
+        Top left coordinates (lon, lat) of the Region
 
     bottom_right : tuple of float, optional
         Bottom right coordinates (lon, lat) of the Region
@@ -39,6 +39,8 @@ def compose(
         change it to change the scale of the final data points. The highest,
         the lower the spatial resolution. Should be at least ``10``.
 
+    statistic : str
+        The descriptive statistic as per Google Earth Engine's reducers.
     n_jobs : int, optional
         Set the parallelisation factor (number of threads) for the GEE data
         access process. Set to 1 if no parallelisation required.
