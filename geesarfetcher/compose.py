@@ -210,11 +210,14 @@ def compose(
     # retrieving the number of pixels per image
     try:
         polygon = ee.Geometry.Polygon(list_of_coordinates)
-        sentinel_1_roi = fetch_sentinel1_data(
-            start_date=date_intervals[0][0],
-            end_date=date_intervals[-1][1],
+        sentinel_1_roi = compose_sentinel1_data(
+            start_date=start_date,
+            end_date=end_date,
             geometry=polygon,
+            scale=scale,
+            crs=crs,
             pass_direction=pass_direction,
+            statistic=statistic,
         )
 
     except Exception as e:
@@ -239,13 +242,14 @@ def compose(
     )
     def _get_zone_between_dates(start_date, end_date, polygon, scale, crs, pass_direction):
         try:
-            val_header, val = fetch_sentinel1_data(
+            val_header, val = compose_sentinel1_data(
                 start_date=start_date,
                 end_date=end_date,
-                geometry=polygon,
-                pass_direction=pass_direction,
+                geometry=subregion,
                 scale=scale,
                 crs=crs,
+                pass_direction=pass_direction,
+                statistic=statistic,
             )
             vals.extend(val)
 
