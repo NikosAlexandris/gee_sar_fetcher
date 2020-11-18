@@ -251,16 +251,19 @@ def compose(
 
     except Exception as e:
         # If the area is found to be too big
-        if (str(e) == "ImageCollection.getRegion: No bands in collection."):
-            raise ValueError(
-                "No bands found in collection. Orbit incorrect for localisation, please visit https://sentinel.esa.int/web/sentinel/missions/sentinel-1/observation-scenario for more info.")
-        total_count_of_pixels = retrieve_max_pixel_count_from_pattern(str(e))
+        if (str(e) == MESSAGE_NO_BANDS_IN_COLLECTION):
+            raise ValueError(VALUE_ERROR_NO_BANDS_IN_COLLECTION)
+        total_count_of_pixels = retrieve_max_pixel_count_from_composite(str(e))
         if top_left is not None:
             list_of_coordinates = tile_coordinates(
-                total_count_of_pixels, (top_left, bottom_right))
+                    total_count_of_pixels,
+                    (top_left, bottom_right)
+            )
         else:
             list_of_coordinates = tile_coordinates(
-                total_count_of_pixels, coords)
+                    total_count_of_pixels,
+                    coordinates
+            )
 
     ###################################
     ## RETRIEVING COORDINATES VALUES ##
