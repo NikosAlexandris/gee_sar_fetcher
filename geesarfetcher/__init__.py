@@ -35,7 +35,7 @@ if os.environ.get('READTHEDOCS') == None:
 def fetch(
     top_left=None,
     bottom_right=None,
-    coords=None,
+    coordinates=None,
     start_date: datetime = date.today()-timedelta(days=365),
     end_date: datetime = date.today(),
     ascending: bool = True,
@@ -53,8 +53,8 @@ def fetch(
     bottom_right : tuple of float, optional
         Bottom right coordinates (lon, lat) of the Region
 
-    coords : tuple of tuple of float or list of list of float, optional
-        If `top_left` and `bottom_right` are not specified, we expect `coords`
+    coordinates : tuple of tuple of float or list of list of float, optional
+        If `top_left` and `bottom_right` are not specified, we expect `coordinates`
         to be a list (resp. tuple) of the form ``[top_left, bottom_right]``
         (resp. ``(top_left, bottom_right)``)
 
@@ -98,14 +98,14 @@ def fetch(
                 Dictionnary describing data for each axis of the stack and the
                 coordinates
     '''
-    assert(coords is None or (
+    assert(coordinates is None or (
         (
-            type(coords) == list
-            or type(coords) == tuple
+            type(coordinates) == list
+            or type(coordinates) == tuple
         )
-        and len(coords) == 2)
-        and len(coords[0]) == len(coords[1])
-        and len(coords[0]) == 2
+        and len(coordinates) == 2)
+        and len(coordinates[0]) == len(coordinates[1])
+        and len(coordinates[0]) == 2
     )
     assert(
             (
@@ -127,7 +127,7 @@ def fetch(
 
     if (top_left is not None
         and bottom_right is not None
-        and coords is not None):
+        and coordinates is not None):
         raise ValueError(VALUE_ERROR_NO_COORDINATES)
 
     date_intervals = get_date_interval_array(start_date, end_date)
@@ -136,7 +136,7 @@ def fetch(
     if (top_left is not None):
         list_of_coordinates = [make_polygon(top_left, bottom_right)]
     else:
-        list_of_coordinates = [coords]
+        list_of_coordinates = [coordinates]
 
     # retrieving the number of pixels per image
     try:
@@ -162,7 +162,7 @@ def fetch(
         else:
             list_of_coordinates = tile_coordinates(
                     total_count_of_pixels,
-                    coords
+                    coordinates
             )
 
     ###################################

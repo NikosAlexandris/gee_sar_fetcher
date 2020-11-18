@@ -20,8 +20,8 @@ def compose(
     bottom_right : tuple of float, optional
         Bottom right coordinates (lon, lat) of the Region
 
-    coords : tuple of tuple of float or list of list of float, optional
-        If `top_left` and `bottom_right` are not specified, we expect `coords`
+    coordinates : tuple of tuple of float or list of list of float, optional
+        If `top_left` and `bottom_right` are not specified, we expect `coordinates`
         to be a list (resp. tuple) of the form ``[top_left, bottom_right]``
         (resp. ``(top_left, bottom_right)``)
 
@@ -65,14 +65,14 @@ def compose(
                 Dictionnary describing data for each axis of the stack and the
                 coordinates
     '''
-    assert(coords is None or (
+    assert(coordinates is None or (
         (
-            type(coords) == list
-            or type(coords) == tuple
+            type(coordinates) == list
+            or type(coordinates) == tuple
         )
-        and len(coords) == 2)
-        and len(coords[0]) == len(coords[1])
-        and len(coords[0]) == 2
+        and len(coordinates) == 2)
+        and len(coordinates[0]) == len(coordinates[1])
+        and len(coordinates[0]) == 2
     )
     assert(
             (
@@ -91,20 +91,17 @@ def compose(
     assert(start_date is not None)
     assert(end_date is not None)
     assert(end_date > start_date)
-    if (
-            top_left is not None
-            and bottom_right is not None
-            and coords is not None
-    ):
-        raise ValueError(
-            "coords must be None if top_left and bottom_right are not None.")
 
+    if (top_left is not None
+        and bottom_right is not None
+        and coordinates is not None):
+        raise ValueError(VALUE_ERROR_NO_COORDINATES)
     date_intervals = get_date_interval_array(start_date, end_date)
     pass_direction = ASCENDING if ascending else DESCENDING
     if (top_left is not None):
         list_of_coordinates = [make_polygon(top_left, bottom_right)]
     else:
-        list_of_coordinates = [coords]
+        list_of_coordinates = [coordinates]
 
     # retrieving the number of pixels per image
     try:
@@ -153,10 +150,10 @@ def compose(
         except Exception as e:
             pass
 
-    for c in tqdm(list_of_coordinates):
+    for coordinates in tqdm(list_of_coordinates):
         vals = []
         headers = []
-        polygon = ee.Geometry.Polygon([c])
+        subregion = ee.Geometry.Polygon([coordinates])
         # Fill vals with values.
         # TODO: Evaluate eventuality to remove shared memory requirement and to exploit automatic list building from Joblib
         Parallel(n_jobs=n_jobs, require='sharedmem')(delayed(_get_zone_between_dates)(sub_start_date, sub_end_date, polygon, scale, crs, pass_direction) for sub_start_date, sub_end_date in date_intervals)
