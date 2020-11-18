@@ -149,7 +149,6 @@ def fetch(
             pass_direction=pass_direction,
             scale=scale,
             crs=crs,
-            pass_direction=pass_direction,
         )
     except Exception as e:
         # If the area is found to be too big
