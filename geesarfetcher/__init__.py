@@ -23,6 +23,7 @@ from .utils import define_image_shape
 from .utils import retrieve_max_pixel_count_from_pattern
 from .utils import compare_coordinates_dictionaries
 from .utils import get_date_interval_array
+from .constants import ASCENDING, DESCENDING
 from .fetcher import fetch_sentinel1_data
 from .coordinates import populate_coordinates_dictionary
 
@@ -145,6 +146,7 @@ def fetch(
             start_date=date_intervals[0][0],
             end_date=date_intervals[-1][1],
             geometry=polygon,
+            pass_direction=pass_direction,
             scale=scale,
             crs=crs,
             pass_direction=pass_direction,
@@ -242,7 +244,7 @@ def fetch(
     width, height = len(unique_longitudes), len(unique_latitudes)
     image = np.full((height, width, 2, len(timestamps)), fill_value=np.nan)
 
-    print(f"Generating image of shape {height, width}")
+    print(f"Generating image of shape (height x width) {height, width}")
     for p in tqdm(pixel_values):
         x, y = latitudes_dictionary[p["lat"]], longitudes_dictionary[p["lon"]]
         vv = []
@@ -261,7 +263,6 @@ def fetch(
         image[x, y, 1, :] = vh
 
     # we aim to find the couple of (lats, lons) that generates the biggest covered area mongst the retrieved data (pixel wise)
-
 
     #lats = np.array(lats).reshape((height, width))
     #lons = np.array(lons).reshape((height, width))
