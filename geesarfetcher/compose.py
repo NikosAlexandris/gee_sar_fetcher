@@ -322,13 +322,9 @@ def compose(
     ##############################
 
     pixel_values = [per_coord_dict[k] for k in per_coord_dict.keys()]
-    print("# of pixel_values:", len(pixel_values))
-    cmp_coordinates = cmp_to_key(cmp_coords)
-    pixel_values.sort(key=cmp_coordinates)  # sorting pixels by latitude then longitude
-    print("# of sorted pixel_values:", len(pixel_values))
-    width, height = define_image_shape(pixel_values)
-    print(f"Generating image of shape (width x height) {width} x {height}")
-    def _update_img(pixel_value):
+    coordinates_dictionaries_comparison = cmp_to_key(compare_coordinates_dictionaries)
+    pixel_values.sort(key=coordinates_dictionaries_comparison)  # sorting pixels by latitude then longitude
+
         vv = []
         vh = []
         for timestamp in timestamps:
