@@ -4,7 +4,7 @@ import ee
 import warnings
 from datetime import datetime, date, timedelta
 from tqdm import tqdm
-from pqdm.processes import pqdm
+# from pqdm.processes import pqdm
 from functools import cmp_to_key
 import numpy as np
 from joblib import Parallel, delayed
@@ -117,13 +117,13 @@ def compose_sentinel1_data(
         feature_property = feature['properties']
         value_vh = feature_property.get(VH + '_' + statistic)
         vh.extend([coordinates + [value_vh]])
-        vh.extend([value_vh])
     values = [
-        vv[idx] +
-        [start_date] +
-        [end_date] +
-        [vh[idx]]
-        for idx in range(len(vv))
+              vv[idx][:2] +
+              [start_date] +
+              [end_date] +
+              [vv[idx][2]] +
+              [vh[idx][2]]
+              for idx in range(len(vv))
     ]
     return (header, values)
 
