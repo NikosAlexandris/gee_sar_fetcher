@@ -101,6 +101,25 @@ def retrieve_max_pixel_count_from_pattern(error_str):
         raise ValueError("No max pixels value found")
 
 
+def retrieve_max_pixel_count_from_composite(error_str):
+    '''Given an input getRegion error from GEE, extract the provided points count.
+
+    Parameters
+    ----------
+    error_str : str
+        the str text of the GEE error (e.g. the function caled on ``"ImageCollection.getRegion: Too many values: x points ..."`` will output x)
+
+    Returns
+    -------
+    int
+        Returns the number of points specified in the input image
+    '''
+    try:
+        return int(error_str.split('Collection query aborted after accumulating over ')[1].split(' elements.')[0])
+    except:
+        raise ValueError("No max pixels value found")
+
+
 def compare_coordinates_dictionaries(a, b):
     '''
     Given two coordinates dictionaries a and b, compare which one is closer to
