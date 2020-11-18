@@ -98,8 +98,10 @@ def compose(
         and bottom_right is not None
         and coordinates is not None):
         raise ValueError(VALUE_ERROR_NO_COORDINATES)
-    date_intervals = get_date_interval_array(start_date, end_date)
+
+    # date_intervals = get_date_interval_array(start_date, end_date)
     pass_direction = ASCENDING if ascending else DESCENDING
+
     if (top_left is not None):
         list_of_coordinates = [make_polygon(top_left, bottom_right)]
     else:
@@ -132,8 +134,9 @@ def compose(
     ## RETRIEVING COORDINATES VALUES ##
     ## FOR EACH DATE INTERVAL        ##
     ###################################
-    print(f"Region sliced in {len(list_of_coordinates)} subregions and {len(date_intervals)} time intervals.")
-
+    print(f'Region sliced in '
+           '{len(list_of_coordinates)} subregions.'
+    )
     def _get_zone_between_dates(start_date, end_date, polygon, scale, crs, pass_direction):
         try:
             val_header, val = fetch_sentinel1_data(
@@ -178,14 +181,6 @@ def compose(
     cmp_coordinates = cmp_to_key(cmp_coords)
     pixel_values.sort(key=cmp_coordinates)  # sorting pixels by latitude then longitude
     print("# of sorted pixel_values:", len(pixel_values))
-    timestamps = np.unique(
-            [
-                datetime.fromtimestamp(pixel_values[i]['timestamps'][j]).date()
-                for i in range(len(pixel_values))
-                for j in range(len(pixel_values[i]['timestamps']))
-            ]
-    )
-    print("# of unique timestamps:", len(timestamps))
     width, height = define_image_shape(pixel_values)
     print(f"Generating image of shape (width x height) {width} x {height}")
     def _update_img(pixel_value):
@@ -218,14 +213,12 @@ def compose(
 
     return {
         "stack": img,
-        "timestamps": timestamps,
         "coordinates": coordinates,
         "metadata": {
             "stack": {
                 "axis_0": "height",
                 "axis_1": "width",
                 "axis_2": "polarisations (0:VV, 1:VH)",
-                "axis_3": "timestamps"
             },
             "coordinates": {
                 "axis_0": "height",
