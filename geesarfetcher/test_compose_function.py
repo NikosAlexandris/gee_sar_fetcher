@@ -10,10 +10,9 @@ DESCENDING = 'DESCENDING'
 import ee
 ee.Initialize()
 import datetime
+from geesarfetcher.filter import filter_sentinel1_data
 # from geesarfetcher.compose import compose_sentinel1_data
 from geesarfetcher.compose import compose
-
-# Quick Example
 
 # where?
 scale=1000
@@ -39,6 +38,46 @@ pass_direction = ASCENDING
 
 # compose
 statistic = 'mean'
+
+# # step-by-step
+# filtered_sentinel1_data = filter_sentinel1_data(
+#         start_date=start_date,
+#         end_date=end_date,
+#         geometry=geometry,
+#         pass_direction=pass_direction
+# )
+# values_vv = (filtered_sentinel1_data
+#           .select(VV)
+#           .reduce(statistic)
+#           .sample(
+#               region=geometry,
+#               scale=scale,
+#               projection=crs,
+#               geometries=True,
+#               dropNulls=False,
+#           )
+#           .getInfo()
+# )
+# values_vh = (filtered_sentinel1_data
+#           .select(VH)
+#           .reduce(statistic)
+#           .sample(
+#               region=geometry,
+#               scale=scale,
+#               projection=crs,
+#               geometries=True,
+#               dropNulls=False,
+#           )
+#           .getInfo()
+# )
+# header = ([
+#             'longitude',
+#             'latitude',
+#             'start_date',
+#             'end_date',
+#             VV,
+#             VH]
+# )
 # sentinel_1_composite = compose_sentinel1_data(
 #     start_date=start_date,
 #     end_date=end_date,
@@ -49,12 +88,14 @@ statistic = 'mean'
 #     polarisation=VV,
 #     statistic=statistic,
 # )
+
+# compose()
 sentinel_1_composite = compose(
     top_left=top_left,
     bottom_right=bottom_right,
     start_date=start_date,
     end_date=end_date,
-    ascending=False,
+    ascending=True,
     scale=scale,
     crs=crs,
     statistic=statistic,
