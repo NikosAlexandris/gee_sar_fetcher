@@ -248,7 +248,6 @@ def compose(
             pass_direction=pass_direction,
             statistic=statistic,
         )
-
     except Exception as e:
         # If the area is found to be too big
         if (str(e) == MESSAGE_NO_BANDS_IN_COLLECTION):
@@ -272,7 +271,15 @@ def compose(
     print(f'Region sliced in '
            '{len(list_of_coordinates)} subregions.'
     )
-    def _get_zone_between_dates(start_date, end_date, polygon, scale, crs, pass_direction):
+    def populate_composite_subregion(
+            start_date,
+            end_date,
+            subregion,
+            scale,
+            crs,
+            pass_direction,
+            statistic,
+    ):
         try:
             val_header, val = compose_sentinel1_data(
                 start_date=start_date,
@@ -284,10 +291,8 @@ def compose(
                 statistic=statistic,
             )
             vals.extend(val)
-
             if len(headers) == 0:
                 headers.extend(val_header)
-
         except Exception as e:
             pass
 
@@ -296,8 +301,12 @@ def compose(
         headers = []
         subregion = ee.Geometry.Polygon([coordinates])
         # Fill vals with values.
-        # TODO: Evaluate eventuality to remove shared memory requirement and to exploit automatic list building from Joblib
-        Parallel(n_jobs=n_jobs, require='sharedmem')(delayed(_get_zone_between_dates)(sub_start_date, sub_end_date, polygon, scale, crs, pass_direction) for sub_start_date, sub_end_date in date_intervals)
+        populate_composite_subregion(start_date, end_date, subregion, scale, crs, pass_direction, statistic)
+        # number_of_cpu = joblib.cpu_count()
+        # delayed_functions = [delayed(populate_composite_subregion)(start_date, end_date, subregion, scale, crs, pass_direction, statistic)
+        #     for subregion (subregion := _gee_geometry_polygon(coordinates) for coordinates in tqdm(list_of_coordinates)]
+        # parallel_pool = Parallel(n_jobs=number_of_cpu, require='sharedmem')
+        # parallel_pool(delayed_functions)
 
         print("# of values:", len(vals))
         print("# of headers:", len(headers))
