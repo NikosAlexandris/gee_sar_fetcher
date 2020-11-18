@@ -309,11 +309,13 @@ def compose(
         # parallel_pool(delayed_functions)
 
         dictified_vals = [dict(zip(headers, values)) for values in vals]
+        ###
         per_coord_dict = composite_coordinates_dictionary(dictified_values=dictified_vals)
+        ###
 
     # per_coord_dict is a dictionnary matching to each coordinate key its values through time as well as its timestamps
 
-    ##############################
+    #############################
     ## BUILDING TEMPORAL IMAGES ##
     ##############################
 
@@ -321,35 +323,59 @@ def compose(
     coordinates_dictionaries_comparison = cmp_to_key(compare_coordinates_dictionaries)
     pixel_values.sort(key=coordinates_dictionaries_comparison)  # sorting pixels by latitude then longitude
 
+    latitudes, longitudes = tuple(
+                                    zip(*[(p["lat"], p["lon"])
+                                    for p in pixel_values])
+                            )
+    unique_latitudes = np.unique(latitudes)
+    unique_latitudes = unique_latitudes[::-1]
+    latitudes_dictionary = {
+            unique_latitudes[i]: i
+            for i in range(len(unique_latitudes))
+    }
+    unique_longitudes = np.unique(longitudes)
+    longitudes_dictionary = {
+            unique_longitudes[i]: i
+            for i in range(len(unique_longitudes))
+    }
+    coordinates = [
+                    [latitude, longitude]
+                    for longitude in unique_longitudes
+                    for latitude in unique_latitudes
+                ]
+    width, height = len(unique_longitudes), len(unique_latitudes)
+    coordinates = np.array(coordinates).reshape(height, width, 2)
+    image = np.full((height, width, 2), fill_value=np.nan)
+
+    print(f"Generating image of shape (height x width) {height, width}")
+    for p in tqdm(pixel_values):
+        x, y = latitudes_dictionary[p["lat"]], longitudes_dictionary[p["lon"]]
         vv = []
         vh = []
         for timestamp in timestamps:
 
             indexes = np.argwhere(
-                np.array([datetime.fromtimestamp(p_t).date() for p_t in pixel_value["timestamps"]]) == timestamp
+                np.array([datetime.fromtimestamp(p_t).date() for p_t in p["timestamps"]]) == timestamp
             )
             vv.append(np.nanmean(
-                np.array(pixel_value["VV"], dtype=float)[indexes]))
+                np.array(p["VV"], dtype=float)[indexes]))
             vh.append(np.nanmean(
-                np.array(pixel_value["VH"], dtype=float)[indexes]))
-        return [vv, vh]
+                np.array(p["VH"], dtype=float)[indexes]))
 
-    print("Height:", height)
-    print("Width:", width)
-    indexes = [(i,j) for i in range(height) for j in range(width)]
-    vals = Parallel(n_jobs=n_jobs)(
-        delayed(_update_img)(pixel_values[i*width + j]) for (i,j) in tqdm(indexes)
-    )
-    img = np.array(vals).reshape((height, width, 2, len(timestamps)))
-    lats, lons = tuple(zip(*[(p["lat"], p["lon"]) for p in pixel_values]))
-    lats = np.array(lats).reshape((height, width))
-    lons = np.array(lons).reshape((height, width))
-    coordinates = np.zeros((height, width,2))
-    coordinates[:,:,0] = lats
-    coordinates[:,:,1] = lons
+        image[x, y, 0, :] = vv
+        image[x, y, 1, :] = vh
+
+    # we aim to find the couple of (lats, lons) that generates the biggest covered area mongst the retrieved data (pixel wise)
+
+
+    #lats = np.array(lats).reshape((height, width))
+    #lons = np.array(lons).reshape((height, width))
+    #coordinates = np.zeros((height, width,2))
+    #coordinates[:,:,0] = lats
+    #coordinates[:,:,1] = lons
 
     return {
-        "stack": img,
+        "stack": image,
         "coordinates": coordinates,
         "metadata": {
             "stack": {
