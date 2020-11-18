@@ -348,31 +348,12 @@ def compose(
     image = np.full((height, width, 2), fill_value=np.nan)
 
     print(f"Generating image of shape (height x width) {height, width}")
-    for p in tqdm(pixel_values):
-        x, y = latitudes_dictionary[p["lat"]], longitudes_dictionary[p["lon"]]
-        vv = []
-        vh = []
-        for timestamp in timestamps:
-
-            indexes = np.argwhere(
-                np.array([datetime.fromtimestamp(p_t).date() for p_t in p["timestamps"]]) == timestamp
-            )
-            vv.append(np.nanmean(
-                np.array(p["VV"], dtype=float)[indexes]))
-            vh.append(np.nanmean(
-                np.array(p["VH"], dtype=float)[indexes]))
-
-        image[x, y, 0, :] = vv
-        image[x, y, 1, :] = vh
-
-    # we aim to find the couple of (lats, lons) that generates the biggest covered area mongst the retrieved data (pixel wise)
-
-
-    #lats = np.array(lats).reshape((height, width))
-    #lons = np.array(lons).reshape((height, width))
-    #coordinates = np.zeros((height, width,2))
-    #coordinates[:,:,0] = lats
-    #coordinates[:,:,1] = lons
+    for pixel_value in tqdm(pixel_values):
+        x = latitudes_dictionary[pixel_value["lat"]]
+        y = longitudes_dictionary[pixel_value["lon"]]
+        debug(locals())
+        image[x, y, 0] = np.nanmean(pixel_value[VV], dtype=float)
+        image[x, y, 1] = np.nanmean(pixel_value[VH], dtype=float)
 
     return {
         "stack": image,
