@@ -205,21 +205,6 @@ def compose(
         list_of_coordinates = [coordinates]
 
 
-    latitudes, longitudes = tuple(
-                                    zip(*[(p["lat"], p["lon"])
-                                    for p in pixel_values])
-                            )
-    unique_latitudes = np.unique(latitudes)
-    unique_latitudes = unique_latitudes[::-1]
-    latitudes_dictionary = {
-            unique_latitudes[i]: i
-            for i in range(len(unique_latitudes))
-    }
-    unique_longitudes = np.unique(longitudes)
-    longitudes_dictionary = {
-            unique_longitudes[i]: i
-            for i in range(len(unique_longitudes))
-    }
     coordinates = [
                     [latitude, longitude]
                     for longitude in unique_longitudes
