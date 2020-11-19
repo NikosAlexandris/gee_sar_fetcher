@@ -128,3 +128,19 @@ def compare_coordinates_dictionaries(a, b):
         return 0
 
 
+def generate_coordinates(
+        height,
+        width,
+        pixel_values,
+        unique_latitudes,
+        unique_longitudes,
+    ):
+    """
+    """
+    coordinates = [
+                    [latitude, longitude]
+                    for longitude in unique_longitudes
+                    for latitude in unique_latitudes
+    ]
+    coordinates = numpy.array(coordinates).reshape(height, width, 2)
+    return coordinates

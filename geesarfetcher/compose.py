@@ -203,12 +203,3 @@ def compose(
         list_of_coordinates = [make_polygon(top_left, bottom_right)]
     else:
         list_of_coordinates = [coordinates]
-
-
-    coordinates = [
-                    [latitude, longitude]
-                    for longitude in unique_longitudes
-                    for latitude in unique_latitudes
-                ]
-    width, height = len(unique_longitudes), len(unique_latitudes)
-    coordinates = np.array(coordinates).reshape(height, width, 2)
