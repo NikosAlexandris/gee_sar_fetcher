@@ -55,7 +55,7 @@ def compose_sentinel1_data(
         geometry,
         scale,
         crs,
-        pass_direction=ASCENDING,
+        pass_direction,
         statistic=MEAN,
     ):
     '''
