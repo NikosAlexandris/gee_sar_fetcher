@@ -5,7 +5,7 @@ from .compose import count_composite_pixels
 from .compose import compose_sentinel1_data
 from .messages import MESSAGE_NO_BANDS_IN_COLLECTION
 from .messages import VALUE_ERROR_NO_BANDS_IN_COLLECTION
-from .utils import retrieve_max_pixel_count_from_composite
+from .utils import read_max_elements_limit_from_error
 from .utils import tile_coordinates
 
 
@@ -39,7 +39,7 @@ def slice_region(
         # If the area is found to be too big
         if (str(e) == MESSAGE_NO_BANDS_IN_COLLECTION):
             raise ValueError(VALUE_ERROR_NO_BANDS_IN_COLLECTION)
-        total_count_of_pixels = retrieve_max_pixel_count_from_composite(str(e))
+        maximum_gee_elements = read_max_elements_limit_from_error(str(e))
         composite_pixels_count = count_composite_pixels(
             start_date=start_date,
             end_date=end_date,

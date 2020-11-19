@@ -101,7 +101,7 @@ def retrieve_max_pixel_count_from_pattern(error_str):
         raise ValueError("No max pixels value found")
 
 
-def retrieve_max_pixel_count_from_composite(error_str):
+def read_max_elements_limit_from_error(error_str):
     '''Given an input getRegion error from GEE, extract the provided points count.
 
     Parameters
