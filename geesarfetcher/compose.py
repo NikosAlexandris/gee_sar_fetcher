@@ -4,6 +4,50 @@ from .constants import VV
 from .constants import VH
 from .filter import filter_sentinel1_data
 
+def count_composite_pixels(
+        start_date,
+        end_date,
+        geometry,
+        scale,
+        crs,
+        pass_direction,
+        statistic=MEAN,
+        ):
+    """
+    """
+    filtered_sentinel1_data = filter_sentinel1_data(
+            start_date=start_date,
+            end_date=end_date,
+            geometry=geometry,
+            pass_direction=pass_direction
+    )
+    vv_pixel_count = (filtered_sentinel1_data
+            .select(VV)
+            .reduce(statistic)
+            .sample(
+                region=geometry,
+                scale=scale,
+                projection=crs,
+                geometries=True,
+                dropNulls=False,
+            )
+            .size()
+            .getInfo()
+    )
+    vh_pixel_count = (filtered_sentinel1_data
+            .select(VV)
+            .reduce(statistic)
+            .sample(
+                region=geometry,
+                scale=scale,
+                projection=crs,
+                geometries=True,
+                dropNulls=False,
+            )
+            .size()
+            .getInfo()
+    )
+    return max(vv_pixel_count, vh_pixel_count)
 
 def compose_sentinel1_data(
         start_date,
