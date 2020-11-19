@@ -1,4 +1,7 @@
-def populate_coordinates_dictionary(dictified_values):
+from .utils import make_polygon
+import numpy
+
+
 def list_coordinates(top_left, bottom_right, coordinates=None):
     if (top_left is not None):
         list_of_coordinates = [make_polygon(top_left, bottom_right)]
