@@ -355,24 +355,3 @@ def compose(
         image[x, y, 0] = np.nanmean(pixel_value[VV], dtype=float)
         image[x, y, 1] = np.nanmean(pixel_value[VH], dtype=float)
 
-    return {
-        'stack': image,
-        'coordinates': coordinates,
-        'metadata': {
-            'stack': {
-                'axis_0': 'height',
-                'axis_1': 'width',
-                'axis_2': {
-                    'polarisations': {
-                        0:VV,
-                        1:VH
-                    },
-                },
-            },
-            'coordinates': {
-                'axis_0': 'height',
-                'axis_1': 'width',
-                'axis_2': '0:latitude; 1:longitude',
-            }
-        }
-    }
