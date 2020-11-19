@@ -1,31 +1,9 @@
-from devtools import debug
-# LIBRARY IMPORTS
-import ee
-import warnings
-from datetime import datetime, date, timedelta
-from tqdm import tqdm
-# from pqdm.processes import pqdm
-from functools import cmp_to_key
-import numpy as np
-from joblib import Parallel, delayed
-import os
-
-# LOCAL IMPORTS
-from .constants import ASCENDING, DESCENDING
-from .constants import VV, VH
+from .constants import ASCENDING
 from .constants import MEAN
-from .messages import MESSAGE_NO_BANDS_IN_COLLECTION
-from .messages import VALUE_ERROR_NO_BANDS_IN_COLLECTION
-from .messages import VALUE_ERROR_NO_COORDINATES
-from .utils import make_polygon
-from .utils import tile_coordinates
-from .utils import define_image_shape
-from .utils import retrieve_max_pixel_count_from_composite
-from .utils import compare_coordinates_dictionaries
-from .utils import get_date_interval_array
-from .fetcher import fetch_sentinel1_data
+from .constants import VV
+from .constants import VH
 from .filter import filter_sentinel1_data
-from .coordinates import composite_coordinates_dictionary
+
 
 def compose_sentinel1_data(
         start_date,
@@ -126,80 +104,3 @@ def compose_sentinel1_data(
               for idx in range(len(vv))
     ]
     return (header, values)
-
-def compose(
-    top_left=None,
-    bottom_right=None,
-    coordinates=None,
-    start_date: datetime = date.today()-timedelta(days=365),
-    end_date: datetime = date.today(),
-    ascending: bool = True,
-    scale: int = 10,
-    crs: str = 'EPSG:4326',
-    statistic: str = 'mean',
-    n_jobs: int = 1,
-):
-    '''Fetches a composite of SAR data in the form of a dictionnary with image data as well as timestamps
-
-    Parameters
-    ----------
-    top_left : tuple of float, optional
-        Top left coordinates (lon, lat) of the Region
-
-    bottom_right : tuple of float, optional
-        Bottom right coordinates (lon, lat) of the Region
-
-    coordinates : tuple of tuple of float or list of list of float, optional
-        If `top_left` and `bottom_right` are not specified, we expect `coordinates`
-        to be a list (resp. tuple) of the form ``[top_left, bottom_right]``
-        (resp. ``(top_left, bottom_right)``)
-
-    start_date : datetime.datetime, optional
-        First date of the time interval
-
-    end_date : datetime.datetime, optional
-        Last date of the time interval
-
-    ascending : boolean, optional
-        The trajectory to use when selecting data
-
-    scale : int, optional
-        Scale parameters of the getRegion() function. Defaulting at ``20``,
-        change it to change the scale of the final data points. The highest,
-        the lower the spatial resolution. Should be at least ``10``.
-
-    statistic : str
-        The descriptive statistic as per Google Earth Engine's reducers.
-    n_jobs : int, optional
-        Set the parallelisation factor (number of threads) for the GEE data
-        access process. Set to 1 if no parallelisation required.
-
-    Returns
-    -------
-    `dict`
-        Dictionnary with two keys:
-
-            ``"stacks"``
-                4-D array containing db intensity measure (`numpy.ndarray`),
-                ``(height, width, time_series_length, pol_count)``
-
-            ``"coordinates"``
-                3-D array containg coordinates where ``[:,:,0]`` provides
-                access to latitude and ``[:,:,1]`` provides access to
-                longitude, (`numpy.ndarray`), ``(height, width, 2)``
-
-            ``"timestamps"``
-                list of acquisition timestamps of size (time_series_length,)
-                (`list of str`)
-
-            ``"metadata"``
-                Dictionnary describing data for each axis of the stack and the
-                coordinates
-    '''
-    # date_intervals = get_date_interval_array(start_date, end_date)
-    pass_direction = ASCENDING if ascending else DESCENDING
-
-    if (top_left is not None):
-        list_of_coordinates = [make_polygon(top_left, bottom_right)]
-    else:
-        list_of_coordinates = [coordinates]
