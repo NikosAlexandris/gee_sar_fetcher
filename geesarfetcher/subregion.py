@@ -21,9 +21,7 @@ def slice_region(
         statistic,
     ):
     """
-    """
     list_of_coordinates = list_coordinates(top_left, bottom_right, coordinates)
-    # retrieving the number of pixels per image
     try:
         polygon = ee.Geometry.Polygon(list_of_coordinates)
         sentinel1_composite = compose_sentinel1_data(
@@ -36,7 +34,6 @@ def slice_region(
             statistic=statistic,
         )
     except Exception as e:
-        # If the area is found to be too big
         if (str(e) == MESSAGE_NO_BANDS_IN_COLLECTION):
             raise ValueError(VALUE_ERROR_NO_BANDS_IN_COLLECTION)
         maximum_gee_elements = read_max_elements_limit_from_error(str(e))
@@ -59,9 +56,6 @@ def slice_region(
                     total_count_of_pixels=composite_pixels_count,
                     coordinates
             )
-
-    ## RETRIEVE COORDINATES VALUES
-
     print(f'Region sliced in '
           f'{len(list_of_coordinates)} subregions.'
     )
