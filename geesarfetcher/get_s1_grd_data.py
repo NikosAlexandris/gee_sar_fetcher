@@ -60,8 +60,15 @@ values_vv = (image_collection
           )
           .getInfo()
 )
-# values_vh = (image_collection
-#           .select(VH)
-#           .getRegion(geometry, scale=scale, crs=crs)
-#           .getInfo()
-# )
+values_vh = (image_collection
+          .select(VH)
+          .reduce(statistic)
+          .sample(
+              region=geometry,
+              scale=scale,
+              projection=crs,
+              geometries=True,
+              dropNulls=False,
+          )
+          .getInfo()
+)
