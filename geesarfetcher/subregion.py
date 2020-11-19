@@ -20,6 +20,10 @@ def slice_region(
         pass_direction,
         statistic,
     ):
+    """Tries to retrieving the number of pixels per image. If the total number
+    of pixels exceeds the (currently) 5000 values, it slices the requested
+    region in subregions and returns a nested list of sub-bounding box
+    coordinates.
     """
     list_of_coordinates = list_coordinates(top_left, bottom_right, coordinates)
     try:
