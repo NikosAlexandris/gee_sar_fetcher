@@ -101,3 +101,30 @@ def composite_coordinates_dictionary(dictified_values):
             coordinates_dictionary[new_key]["VH"] = [entry["VH"]]
 
     return coordinates_dictionary
+
+
+def compare_coordinates_dictionaries(a, b):
+    '''
+    Given two coordinates dictionaries a and b, compare which one is closer to
+    the North-Eastern direction
+
+    Parameters
+    ----------
+    a : dict
+        dict with keys ``"lon"`` and ``"lat"``
+    b : dict
+        dict with keys ``"lon"`` and ``"lat"``
+
+    Returns
+    -------
+    int
+        **-1** if ``a > b``, **1** if ``a < b``, **0** if ``a == b``
+    '''
+    if a["lat"] != b["lat"]:
+        return 1 if a["lat"] < b["lat"] else -1
+    elif a["lon"] != b["lon"]:
+        return 1 if a["lon"] < b["lon"] else -1
+    else:
+        return 0
+
+
