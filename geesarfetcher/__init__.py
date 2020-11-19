@@ -239,8 +239,8 @@ def fetch(
                     for longitude in unique_longitudes
                     for latitude in unique_latitudes
                 ]
-    coordinates = np.array(coordinates).reshape(height, width, 2)
     width, height = len(unique_longitudes), len(unique_latitudes)
+    coordinates = np.array(coordinates).reshape(height, width, 2)
     image = np.full((height, width, 2, len(timestamps)), fill_value=np.nan)
 
     print(f"Generating image of shape (height x width) {height, width}")
