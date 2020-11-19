@@ -264,18 +264,6 @@ def compose(
         except Exception as e:
             pass
 
-    for coordinates in tqdm(list_of_coordinates):
-        vals = []
-        headers = []
-        subregion = ee.Geometry.Polygon([coordinates])
-        # Fill vals with values.
-        populate_composite_subregion(start_date, end_date, subregion, scale, crs, pass_direction, statistic)
-        # number_of_cpu = joblib.cpu_count()
-        # delayed_functions = [delayed(populate_composite_subregion)(start_date, end_date, subregion, scale, crs, pass_direction, statistic)
-        #     for subregion (subregion := _gee_geometry_polygon(coordinates) for coordinates in tqdm(list_of_coordinates)]
-        # parallel_pool = Parallel(n_jobs=number_of_cpu, require='sharedmem')
-        # parallel_pool(delayed_functions)
-
 
     latitudes, longitudes = tuple(
                                     zip(*[(p["lat"], p["lon"])

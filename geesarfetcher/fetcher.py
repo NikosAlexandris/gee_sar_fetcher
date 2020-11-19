@@ -56,3 +56,39 @@ def fetch_sentinel1_data(
             val_vv[i][1:] + [val_vh[i][val_vh[0].index(VH)]] for i in range(1, len(val_vv))
     ]
     return (val_header, val)
+
+def fetch_composite_pixels(
+        list_of_coordinates,
+        start_date,
+        end_date,
+        scale,
+        crs,
+        pass_direction,
+        statistic,
+    ):
+    header = []
+    composite_values = []
+    for coordinates in tqdm(list_of_coordinates):
+        try:
+            subregion = ee.Geometry.Polygon([coordinates])
+            subregion_header, subregion_values = populate_composite_subregion(
+                start_date,
+                end_date,
+                subregion,
+                scale,
+                crs,
+                pass_direction,
+                statistic,
+            )
+            composite_values.extend(subregion_values)
+            if not header:
+                header.extend(subregion_header)
+        except Exception as e:
+            print("Some exception occured:", e)
+            pass
+
+    pixel_values = dictify_pixel_values(
+            header=header,
+            pixel_values_list=composite_values,
+    )
+    return pixel_values
