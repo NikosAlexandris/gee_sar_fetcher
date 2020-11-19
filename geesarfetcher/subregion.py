@@ -53,12 +53,14 @@ def slice_region(
         if top_left is not None:
             list_of_coordinates = tile_coordinates(
                     total_count_of_pixels=composite_pixels_count,
-                    (top_left, bottom_right)
+                    coordinates=(top_left, bottom_right),
+                    max_gee=maximum_gee_elements,
             )
         else:
             list_of_coordinates = tile_coordinates(
                     total_count_of_pixels=composite_pixels_count,
-                    coordinates
+                    coordinates=coordinates,
+                    max_gee=maximum_gee_elements,
             )
     print(f'Region sliced in '
           f'{len(list_of_coordinates)} subregions.'
