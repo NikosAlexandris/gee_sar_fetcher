@@ -1,6 +1,7 @@
 from devtools import debug
 from .coordinates import list_coordinates
 import ee
+from .compose import count_composite_pixels
 from .compose import compose_sentinel1_data
 from .messages import MESSAGE_NO_BANDS_IN_COLLECTION
 from .messages import VALUE_ERROR_NO_BANDS_IN_COLLECTION
@@ -39,14 +40,23 @@ def slice_region(
         if (str(e) == MESSAGE_NO_BANDS_IN_COLLECTION):
             raise ValueError(VALUE_ERROR_NO_BANDS_IN_COLLECTION)
         total_count_of_pixels = retrieve_max_pixel_count_from_composite(str(e))
+        composite_pixels_count = count_composite_pixels(
+            start_date=start_date,
+            end_date=end_date,
+            geometry=polygon,
+            scale=scale,
+            crs=crs,
+            pass_direction=pass_direction,
+            statistic=statistic,
+        )
         if top_left is not None:
             list_of_coordinates = tile_coordinates(
-                    total_count_of_pixels,
+                    total_count_of_pixels=composite_pixels_count,
                     (top_left, bottom_right)
             )
         else:
             list_of_coordinates = tile_coordinates(
-                    total_count_of_pixels,
+                    total_count_of_pixels=composite_pixels_count,
                     coordinates
             )
 
