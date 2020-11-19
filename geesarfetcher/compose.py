@@ -308,20 +308,6 @@ def compose(
         # parallel_pool = Parallel(n_jobs=number_of_cpu, require='sharedmem')
         # parallel_pool(delayed_functions)
 
-        dictified_vals = [dict(zip(headers, values)) for values in vals]
-        ###
-        per_coord_dict = composite_coordinates_dictionary(dictified_values=dictified_vals)
-        ###
-
-    # per_coord_dict is a dictionnary matching to each coordinate key its values through time as well as its timestamps
-
-    #############################
-    ## BUILDING TEMPORAL IMAGES ##
-    ##############################
-
-    pixel_values = [per_coord_dict[k] for k in per_coord_dict.keys()]
-    coordinates_dictionaries_comparison = cmp_to_key(compare_coordinates_dictionaries)
-    pixel_values.sort(key=coordinates_dictionaries_comparison)  # sorting pixels by latitude then longitude
 
     latitudes, longitudes = tuple(
                                     zip(*[(p["lat"], p["lon"])
