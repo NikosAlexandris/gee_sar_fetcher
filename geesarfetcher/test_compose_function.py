@@ -1,3 +1,11 @@
+# imports
+import ee
+ee.Initialize()
+import datetime
+from geesarfetcher.api import compose
+import numpy
+from numpy import savetxt
+
 # constants
 SENTINEL1_COLLECTION_ID = 'COPERNICUS/S1_GRD'
 VV = 'VV'
@@ -5,18 +13,10 @@ VH = 'VH'
 IW = 'IW'
 ASCENDING = 'ASCENDING'
 DESCENDING = 'DESCENDING'
-
-# imports
-import ee
-ee.Initialize()
-import datetime
-from geesarfetcher.filter import filter_sentinel1_data
-# from geesarfetcher.compose import compose_sentinel1_data
-from geesarfetcher.compose import compose
+SRORG6974 = 'SR-ORG:6974'  # projection
 
 # where?
 scale=1000
-crs = 'SR-ORG:6974'  # projection
 top_left = [-104.77431630331856, 41.829889598264826]
 bottom_right = [-104.65140675742012, 41.81515375846025]
 # top_left = [5.26948161, 49.97440374]
@@ -26,70 +26,15 @@ y_min = bottom_right[1]
 x_max = bottom_right[0]
 y_max = top_left[1]
 extent = (x_min, y_min, x_max, y_max)
-# geometry = ee.Geometry.Rectangle(extent, crs, False)
+# geometry = ee.Geometry.Rectangle(extent, SRORG6974, False)
 geometry = ee.Geometry.Rectangle(extent)
 
 # when?
 start_date = datetime.datetime(2019, 6, 1)
 end_date = datetime.datetime(2019, 6, 10)
 
-# orbit properties
-pass_direction = ASCENDING
-
 # compose
 statistic = 'mean'
-
-# # step-by-step
-# filtered_sentinel1_data = filter_sentinel1_data(
-#         start_date=start_date,
-#         end_date=end_date,
-#         geometry=geometry,
-#         pass_direction=pass_direction
-# )
-# values_vv = (filtered_sentinel1_data
-#           .select(VV)
-#           .reduce(statistic)
-#           .sample(
-#               region=geometry,
-#               scale=scale,
-#               projection=crs,
-#               geometries=True,
-#               dropNulls=False,
-#           )
-#           .getInfo()
-# )
-# values_vh = (filtered_sentinel1_data
-#           .select(VH)
-#           .reduce(statistic)
-#           .sample(
-#               region=geometry,
-#               scale=scale,
-#               projection=crs,
-#               geometries=True,
-#               dropNulls=False,
-#           )
-#           .getInfo()
-# )
-# header = ([
-#             'longitude',
-#             'latitude',
-#             'start_date',
-#             'end_date',
-#             VV,
-#             VH]
-# )
-# sentinel_1_composite = compose_sentinel1_data(
-#     start_date=start_date,
-#     end_date=end_date,
-#     geometry=geometry,
-#     scale=scale,
-#     crs=crs,
-#     pass_direction=pass_direction,
-#     polarisation=VV,
-#     statistic=statistic,
-# )
-
-# compose()
 sentinel_1_composite = compose(
     top_left=top_left,
     bottom_right=bottom_right,
@@ -97,7 +42,22 @@ sentinel_1_composite = compose(
     end_date=end_date,
     ascending=True,
     scale=scale,
-    crs=crs,
+    crs=SRORG6974,
     statistic=statistic,
 )
 
+# write out
+header = (',').join(['Latitude,Longitude,VV,VH'])
+output = numpy.dstack((
+    sentinel_1_composite['coordinates'],
+    sentinel_1_composite['stack']
+    )
+)
+savetxt(
+        fname='s1_grd.csv',
+        X=output[0],
+        fmt='%.18f',
+        delimiter=',',
+        header=header,
+        comments=''
+)
