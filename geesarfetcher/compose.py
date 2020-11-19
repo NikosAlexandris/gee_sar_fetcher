@@ -345,13 +345,3 @@ def compose(
                 ]
     width, height = len(unique_longitudes), len(unique_latitudes)
     coordinates = np.array(coordinates).reshape(height, width, 2)
-    image = np.full((height, width, 2), fill_value=np.nan)
-
-    print(f"Generating image of shape (height x width) {height, width}")
-    for pixel_value in tqdm(pixel_values):
-        x = latitudes_dictionary[pixel_value["lat"]]
-        y = longitudes_dictionary[pixel_value["lon"]]
-        debug(locals())
-        image[x, y, 0] = np.nanmean(pixel_value[VV], dtype=float)
-        image[x, y, 1] = np.nanmean(pixel_value[VH], dtype=float)
-
