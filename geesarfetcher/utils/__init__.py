@@ -52,8 +52,6 @@ def tile_coordinates(total_count_of_pixels, coordinates, max_gee=MAX_GEE_PIXELS_
     '''
     assert(len(coordinates) == 2 or len(coordinates) == 5)
 
-    list_of_coordinates = []
-
     if len(coordinates) == 2:
         tmp_c = make_polygon(coordinates[0], coordinates[1])
     else:
@@ -64,21 +62,27 @@ def tile_coordinates(total_count_of_pixels, coordinates, max_gee=MAX_GEE_PIXELS_
 
     # The coordinate polygon will be tiled in `grid_length * grid_length` sub-Polygons
     grid_length = int(math.ceil(math.sqrt(total_count_of_pixels/max_gee)))
-
-    original_polygon_width = tmp_c[1][0] - tmp_c[0][0]
-    original_polygon_height = tmp_c[3][1] - tmp_c[0][1]
-
-    for i in range(grid_length):
-        for j in range(grid_length):
+    min_longitude = min([xy[0] for xy in tmp_c])
+    max_longitude = max([xy[0] for xy in tmp_c])
+    min_latitude = min([xy[1] for xy in tmp_c])
+    max_latitude = max([xy[1] for xy in tmp_c])
+    original_polygon_width = max_longitude - min_longitude
+    original_polygon_height = max_latitude - min_latitude
+    tile_width = original_polygon_width / grid_length
+    tile_height = original_polygon_height / grid_length
+    origin_longitude = tmp_c[0][0]
+    origin_latitude = tmp_c[0][1]
+    list_of_coordinates = []
+    for row in range(grid_length):
+        for column in range(grid_length):
             list_of_coordinates.append(
                 make_polygon(
-                    [tmp_c[0][0]+i*original_polygon_width/grid_length,
-                        tmp_c[0][1]+j*original_polygon_height/grid_length], 
-                    [tmp_c[0][0]+(i+1)*original_polygon_width/grid_length,
-                        tmp_c[0][1]+(j+1)*original_polygon_height/grid_length]
+                    [origin_longitude + row * tile_width,
+                        origin_latitude + column * tile_height],
+                    [origin_longitude + (row+1) * tile_width,
+                        origin_latitude + (column+1) * tile_height]
                 )
             )
-
     return list_of_coordinates
 
 
