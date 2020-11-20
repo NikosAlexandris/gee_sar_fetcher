@@ -28,7 +28,6 @@ def count_composite_pixels(
                 region=geometry,
                 scale=scale,
                 projection=crs,
-                geometries=True,
                 dropNulls=False,
             )
             .size()
@@ -41,7 +40,6 @@ def count_composite_pixels(
                 region=geometry,
                 scale=scale,
                 projection=crs,
-                geometries=True,
                 dropNulls=False,
             )
             .size()
