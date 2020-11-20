@@ -55,13 +55,11 @@ def fetch_sentinel1_data(
             geometry=geometry,
             pass_direction=pass_direction
     )
-
     val_vv = (filtered_sentinel1_data
               .select(VV)
               .getRegion(geometry, scale=scale, crs=crs)
               .getInfo()
     )
-
     val_vh = (filtered_sentinel1_data
               .select(VH)
               .getRegion(geometry, scale=scale, crs=crs)
@@ -89,7 +87,11 @@ def fetch_composite_pixels(
     composite_values = []
     for coordinates in tqdm(list_of_coordinates):
         try:
-            subregion = ee.Geometry.Polygon([coordinates])
+            subregion = ee.Geometry.Polygon(
+                    coords=[coordinates],
+                    proj=crs,
+                    geodesic=False,
+            )
             subregion_header, subregion_values = compose_sentinel1_data(
                 start_date=start_date,
                 end_date=end_date,
