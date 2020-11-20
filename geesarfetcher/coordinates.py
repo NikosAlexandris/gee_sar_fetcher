@@ -19,7 +19,7 @@ def latitudes_and_longitudes(pixel_values):
                 for pixel_value in pixel_values])
     )
     unique_latitudes = numpy.unique(latitudes)
-    unique_latitudes = unique_latitudes[::-1]
+    unique_latitudes = unique_latitudes[::-1]  # why?
     unique_longitudes = numpy.unique(longitudes)
     return unique_latitudes, unique_longitudes
 
