@@ -27,7 +27,11 @@ def slice_region(
     """
     list_of_coordinates = list_coordinates(top_left, bottom_right, coordinates)
     try:
-        polygon = ee.Geometry.Polygon(list_of_coordinates)
+        polygon = ee.Geometry.Polygon(
+                coords=list_of_coordinates,
+                proj=crs,
+                geodesic=False,
+        )
         sentinel1_composite = compose_sentinel1_data(
             start_date=start_date,
             end_date=end_date,
