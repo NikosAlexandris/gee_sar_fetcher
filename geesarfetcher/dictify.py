@@ -10,7 +10,7 @@ def dictify_pixel_values(header, pixel_values_list):
     ----------
     pixel_values :
         A list of lists of values returned from
-        populate_composite_subregion()
+        geesarfetcher.compose.compose_sentinel1_data()
 
     Returns
     -------

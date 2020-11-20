@@ -2,7 +2,7 @@ from .constants import VV, VH, IW, ASCENDING
 from .filter import filter_sentinel1_data
 from tqdm import tqdm
 import ee
-from .subregion import populate_composite_subregion
+from .compose import compose_sentinel1_data
 from .dictify import dictify_pixel_values
 
 
@@ -76,14 +76,14 @@ def fetch_composite_pixels(
     for coordinates in tqdm(list_of_coordinates):
         try:
             subregion = ee.Geometry.Polygon([coordinates])
-            subregion_header, subregion_values = populate_composite_subregion(
-                start_date,
-                end_date,
-                subregion,
-                scale,
-                crs,
-                pass_direction,
-                statistic,
+            subregion_header, subregion_values = compose_sentinel1_data(
+                start_date=start_date,
+                end_date=end_date,
+                geometry=subregion,
+                scale=scale,
+                crs=crs,
+                pass_direction=pass_direction,
+                statistic=statistic,
             )
             composite_values.extend(subregion_values)
             if not header:

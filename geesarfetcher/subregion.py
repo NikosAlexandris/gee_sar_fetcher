@@ -66,26 +66,3 @@ def slice_region(
           f'{len(list_of_coordinates)} subregions.'
     )
     return list_of_coordinates
-
-
-def populate_composite_subregion(
-        start_date,
-        end_date,
-        subregion,
-        scale,
-        crs,
-        pass_direction,
-        statistic,
-    ):
-    """
-    """
-    header, values = compose_sentinel1_data(
-            start_date=start_date,
-            end_date=end_date,
-            geometry=subregion,
-            scale=scale,
-            crs=crs,
-            pass_direction=pass_direction,
-            statistic=statistic,
-    )
-    return (header, values)
