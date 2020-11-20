@@ -11,11 +11,16 @@ def filter_sentinel1_data(start_date, end_date, geometry, pass_direction=ASCENDI
     Parameters
     ----------
     start_date : str
-        str following the pattern ``'yyyy-mm-dd'`` describing the start date of the time interval
+        str following the pattern ``'yyyy-mm-dd'`` describing the start date of
+        the time interval
+
     end_date : str
-        str following the pattern ``'yyyy-mm-dd'`` describing the end date of the time interval
+        str following the pattern ``'yyyy-mm-dd'`` describing the end date of
+        the time interval
+
     geometry : ee.Geometry
         Geometry object defining the area of process
+
     pass_direction : str, optional
         Defines the pass_direction to set for the data retrieval process
 
@@ -24,13 +29,14 @@ def filter_sentinel1_data(start_date, end_date, geometry, pass_direction=ASCENDI
     ee.ImageCollection
         Filtered ImageCollection left to be queried
     '''
-    filtered_data = (ee.ImageCollection(SENTINEL1_COLLECTION_ID)
-                      .filter(ee.Filter.date(start_date, end_date))
-                      .filterBounds(geometry)
-                      .filter(ee.Filter.listContains('transmitterReceiverPolarisation', VV))
-                      .filter(ee.Filter.listContains('transmitterReceiverPolarisation', VH))
-                      .filter(ee.Filter.eq('instrumentMode', IW))
-                      .filter(ee.Filter.eq('orbitProperties_pass', pass_direction))
-                      .filter(ee.Filter.eq('resolution_meters', 10))
+    filtered_data = (
+        ee.ImageCollection(SENTINEL1_COLLECTION_ID)
+        .filter(ee.Filter.date(start_date, end_date))
+        .filterBounds(geometry)
+        .filter(ee.Filter.listContains('transmitterReceiverPolarisation', VV))
+        .filter(ee.Filter.listContains('transmitterReceiverPolarisation', VH))
+        .filter(ee.Filter.eq('instrumentMode', IW))
+        .filter(ee.Filter.eq('orbitProperties_pass', pass_direction))
+        .filter(ee.Filter.eq('resolution_meters', 10))
     )
     return filtered_data
