@@ -57,7 +57,8 @@ def compose_sentinel1_data(
         statistic=MEAN,
     ):
     '''
-    Composes an image from an ImageCollection using input parameters and return data as a tuple of header and values.
+    Composes an image from an ImageCollection using input parameters and return
+    data as a tuple of header and values.
 
     Parameters
     ----------

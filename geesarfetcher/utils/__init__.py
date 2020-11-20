@@ -9,7 +9,8 @@ __all__ = ('tile_coordinates', 'retrieve_max_pixel_count_from_pattern',
 
 
 def make_polygon(top_left, bottom_right):
-    '''Given two (lon, lat) coordinates of both the top left and bottom right corner of a polygon, return the list of corner coordinates of this polygon
+    '''Given two (lon, lat) coordinates of both the top left and bottom right
+    corner of a polygon, return the list of corner coordinates of this polygon
 
     Parameters
     ----------
@@ -21,7 +22,8 @@ def make_polygon(top_left, bottom_right):
     Returns
     -------
     list
-        2-D list of the 5 coordinates need to create a Rectangular Polygon ``[top_left, top_right, bottom_right, bottom_left, top_left]``.
+        2-D list of the 5 coordinates need to create a Rectangular Polygon
+        ``[top_left, top_right, bottom_right, bottom_left, top_left]``.
     '''
     return [
         list(top_left),
@@ -33,21 +35,30 @@ def make_polygon(top_left, bottom_right):
 
 
 def tile_coordinates(total_count_of_pixels, coordinates, max_gee=MAX_GEE_PIXELS_DOWNLOAD):
-    '''Given a coordinates array describing a Polygon, a count of pixes within that polygons, tiles this polygon into a grid a sub-Polygons where each sub-Polygon size matches the max_gee pixel count given as a parameter.
+    '''Given a coordinates array describing a Polygon, a count of pixes within
+    that polygons, tiles this polygon into a grid a sub-Polygons where each
+    sub-Polygon size matches the max_gee pixel count given as a parameter.
 
     Parameters
     ----------
     total_count_of_pixels : int
         Total number of pixels of the designated area
+
     coordinates : array of array of floats
-        Can be a 5-sized list of every coordinates defining the polygon ``[[long1, lat1],[long2, lat1]...,[long1, lat1]]`` or a 2-sized list of coordinates defining the top left and bottom right corner of the Polygon ``[[long1, lat1],[long2, lat2]]``
+        Can be a 5-sized list of every coordinates defining the polygon
+        ``[[long1, lat1],[long2, lat1]...,[long1, lat1]]`` or a 2-sized list of
+        coordinates defining the top left and bottom right corner of the
+        Polygon ``[[long1, lat1],[long2, lat2]]``
+
     max_gee_threshold : int, optional
         Total number of points allowed for one data query. Default: 1048576
 
     Returns
     -------
     list
-        3-dimensional list of coordinates with pixel count inferior or equal to the maximum GEE threshold (shape: ``(number of images, number of coordinates per image, 2)``)
+        3-dimensional list of coordinates with pixel count inferior or equal to
+        the maximum GEE threshold (shape: ``(number of images, number of
+        coordinates per image, 2)``)
 
     '''
     assert(len(coordinates) == 2 or len(coordinates) == 5)
