@@ -27,7 +27,8 @@ def compose(
     statistic: str = 'mean',
     n_jobs: int = 1,
 ):
-    '''Fetches a composite of SAR data in the form of a dictionnary with image data as well as timestamps
+    '''Fetches a composite of SAR data in the form of a dictionnary with image
+    data as well as timestamps
 
     Parameters
     ----------
@@ -38,9 +39,9 @@ def compose(
         Bottom right coordinates (lon, lat) of the Region
 
     coordinates : tuple of tuple of float or list of list of float, optional
-        If `top_left` and `bottom_right` are not specified, we expect `coordinates`
-        to be a list (resp. tuple) of the form ``[top_left, bottom_right]``
-        (resp. ``(top_left, bottom_right)``)
+        If `top_left` and `bottom_right` are not specified, we expect
+        `coordinates` to be a list (resp. tuple) of the form ``[top_left,
+        bottom_right]`` (resp. ``(top_left, bottom_right)``)
 
     start_date : datetime.datetime, optional
         First date of the time interval
