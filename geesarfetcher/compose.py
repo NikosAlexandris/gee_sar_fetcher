@@ -95,37 +95,41 @@ def compose_sentinel1_data(
             pass_direction=pass_direction
     )
     values_vv = (filtered_sentinel1_data
-              .select(VV)
-              .reduce(statistic)
-              .sample(
-                  region=geometry,
-                  scale=scale,
-                  projection=crs,
-                  geometries=True,
-                  dropNulls=False,
-              )
-              .getInfo()
+            .select(VV)
+            .reduce(statistic)
+            .addBands(ee.Image.pixelCoordinates(projection=SRORG6974))
+            .sample(
+                region=geometry,
+                scale=scale,
+                projection=crs,
+                geometries=True,
+                dropNulls=False,
+            )
+            .getInfo()
     )
     values_vh = (filtered_sentinel1_data
-              .select(VH)
-              .reduce(statistic)
-              .sample(
-                  region=geometry,
-                  scale=scale,
-                  projection=crs,
-                  geometries=True,
-                  dropNulls=False,
-              )
-              .getInfo()
+            .select(VH)
+            .reduce(statistic)
+            .addBands(ee.Image.pixelCoordinates(projection=SRORG6974))
+            .sample(
+                region=geometry,
+                scale=scale,
+                projection=crs,
+                geometries=True,
+                dropNulls=False,
+            )
+            .getInfo()
     )
     header = ([
                 'longitude',
                 'latitude',
+                'x',
+                'y',
                 'start_date',
                 'end_date',
                 VV,
-                VH]
-    )
+                VH
+    ])
     vv = []
     for feature in values_vv['features']:
         coordinates = feature['geometry']['coordinates']
