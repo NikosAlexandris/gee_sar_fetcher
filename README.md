@@ -1,17 +1,24 @@
 # GEE SAR Fetcher
 An easy-to-use Python library to download SAR GRD imagery from Google Earth Engine.
 
+
+**Note**
+
+> This is an **experimental fork** of the original pacakge `geesarfetcher`.
+> The aim here is to provide an API to retrieve composite images (in common Remote Sensing terms: aggregate a time series) from the `S1_GRD` image collection.
+> For example, the mean of SAR acquisitions over a specific region and period of time.
+
+
 ## Introduction
 Access Google's multi-petabytes of SAR Imagery data from your python code with *no dimension restraint*. Simply supply coordinates, a time interval and obtain a stack of Sentinel-1 preprocessed PolSAR images.
 This enables quick data analysis of GRD images to get better insights of the temporal dimension in SAR data without having to bother with essential but potentially time-consuming steps such as coregistration or calibration. 
 
 Compatible with python 3.
 
-[![Documentation Status](https://readthedocs.org/projects/gee-sar-fetcher/badge/?version=latest)](https://gee-sar-fetcher.readthedocs.io/en/latest/?badge=latest)
-[![PyPI version](https://badge.fury.io/py/geesarfetcher.svg)](https://badge.fury.io/py/geesarfetcher)
-
 ## Usage
+
 ### Python Import
+
 The main function of this library is the ``fetch`` function:
 ```python
 from geesarfetcher import fetch
@@ -26,7 +33,23 @@ fetch(
     scale=10,
     n_jobs=1
 ) # returns a dictionnary with access to the data through the 'stack' keyword and to its timestamps through the 'timestamps' keyword
+```
 
+The ``compose`` function:
+```
+from geesarfetcher.api import compose
+import datetime
+
+compose(
+    top_left=[7.26948161, 49.97440374],
+    bottom_right=[8.07913236, 48.90621773],
+    start_date=datetime.datetime(2019, 6, 1),
+    end_date=datetime.datetime(2019, 6, 30),
+    ascending=True,
+    scale=1000,
+    statistic='mean',
+    n_jobs=30,
+)  # returns a dictionary with access to (meta-)data through the keywords 'stack', 'coordinates' and 'timestamps' 
 ```
 
 ## Installation
