@@ -109,25 +109,20 @@ def composite_coordinates_dictionary(dictified_values):
     -------
     coordinates_dictionary
     """
-    coordinates_dictionary = {}
+    dictionary = {}
     for entry in dictified_values:
         northing, easting = northing_and_easting(entry)
         coordinates = str(entry.get(northing)) + ':' + str(entry.get(easting))
-
-        if new_key in coordinates_dictionary:
-            # Retrieving measured value
-
+        if coordinates in dictionary:
             dictionary[coordinates][VV].append(entry[VV])
             dictionary[coordinates][VH].append(entry[VH])
         else:
-            coordinates_dictionary[new_key] = {}
-            # Retrieving measured value
-
-    return coordinates_dictionary
+            dictionary[coordinates] = {}
             dictionary[coordinates][northing] = entry.get(northing)
             dictionary[coordinates][easting] = entry.get(easting)
             dictionary[coordinates][VV] = [entry[VV]]
             dictionary[coordinates][VH] = [entry[VH]]
+    return dictionary
 
 
 def compare_coordinates_dictionaries(a, b):
