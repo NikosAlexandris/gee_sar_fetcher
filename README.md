@@ -36,7 +36,7 @@ fetch(
 ```
 
 The ``compose`` function:
-```
+```python
 from geesarfetcher.api import compose
 import datetime
 
