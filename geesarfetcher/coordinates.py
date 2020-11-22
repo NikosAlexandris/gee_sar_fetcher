@@ -1,3 +1,5 @@
+from .constants import VV
+from .constants import VH
 from .utils import make_polygon
 import numpy
 
@@ -67,26 +69,26 @@ def populate_coordinates_dictionary(dictified_values):
     """
     coordinates_dictionary = {}
     for entry in dictified_values:
-        lat = entry["latitude"]
-        lon = entry["longitude"]
-        new_key = str(lat)+":"+str(lon)
+        lat = entry['latitude']
+        lon = entry['longitude']
+        new_key = str(lat)+':'+str(lon)
 
         if new_key in coordinates_dictionary:
             # Retrieving measured value
-            coordinates_dictionary[new_key]["VV"].append(entry["VV"])
-            coordinates_dictionary[new_key]["VH"].append(entry["VH"])
-            tmstp = entry["time"]
-            coordinates_dictionary[new_key]["timestamps"].append(tmstp//1000)
+            coordinates_dictionary[new_key][VV].append(entry[VV])
+            coordinates_dictionary[new_key][VH].append(entry[VH])
+            tmstp = entry['time']
+            coordinates_dictionary[new_key]['timestamps'].append(tmstp//1000)
 
         else:
             coordinates_dictionary[new_key] = {}
             # Retrieving measured value
-            coordinates_dictionary[new_key]["lat"] = lat
-            coordinates_dictionary[new_key]["lon"] = lon
-            coordinates_dictionary[new_key]["VV"] = [entry["VV"]]
-            coordinates_dictionary[new_key]["VH"] = [entry["VH"]]
-            tmstp = entry["time"]
-            coordinates_dictionary[new_key]["timestamps"] = [tmstp//1000]
+            coordinates_dictionary[new_key]['lat'] = lat
+            coordinates_dictionary[new_key]['lon'] = lon
+            coordinates_dictionary[new_key][VV] = [entry[VV]]
+            coordinates_dictionary[new_key][VH] = [entry[VH]]
+            tmstp = entry['time']
+            coordinates_dictionary[new_key]['timestamps'] = [tmstp//1000]
 
     return coordinates_dictionary
 
@@ -117,18 +119,18 @@ def composite_coordinates_dictionary(dictified_values):
 
         if new_key in coordinates_dictionary:
             # Retrieving measured value
-            coordinates_dictionary[new_key]["VV"].append(entry["VV"])
-            coordinates_dictionary[new_key]["VH"].append(entry["VH"])
 
+            dictionary[coordinates][VV].append(entry[VV])
+            dictionary[coordinates][VH].append(entry[VH])
         else:
             coordinates_dictionary[new_key] = {}
             # Retrieving measured value
             coordinates_dictionary[new_key]["lat"] = lat
             coordinates_dictionary[new_key]["lon"] = lon
-            coordinates_dictionary[new_key]["VV"] = [entry["VV"]]
-            coordinates_dictionary[new_key]["VH"] = [entry["VH"]]
 
     return coordinates_dictionary
+            dictionary[coordinates][VV] = [entry[VV]]
+            dictionary[coordinates][VH] = [entry[VH]]
 
 
 def compare_coordinates_dictionaries(a, b):
