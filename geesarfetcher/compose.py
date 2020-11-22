@@ -95,6 +95,8 @@ def compose_sentinel1_data(
             geometry=geometry,
             pass_direction=pass_direction
     )
+    # geometries = True if crs == 'ESPG:4326' else False
+    geometries = True
     values_vv = (filtered_sentinel1_data
             .select(VV)
             .reduce(statistic)
@@ -103,7 +105,7 @@ def compose_sentinel1_data(
                 region=geometry,
                 scale=scale,
                 projection=crs,
-                geometries=True,
+                geometries=geometries,
                 dropNulls=False,
             )
             .getInfo()
@@ -116,7 +118,7 @@ def compose_sentinel1_data(
                 region=geometry,
                 scale=scale,
                 projection=crs,
-                geometries=True,
+                geometries=geometries,
                 dropNulls=False,
             )
             .getInfo()
