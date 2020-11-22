@@ -113,9 +113,8 @@ def composite_coordinates_dictionary(dictified_values):
     """
     coordinates_dictionary = {}
     for entry in dictified_values:
-        lat = entry["latitude"]
-        lon = entry["longitude"]
-        new_key = str(lat)+":"+str(lon)
+        northing, easting = northing_and_easting(entry)
+        coordinates = str(entry.get(northing)) + ':' + str(entry.get(easting))
 
         if new_key in coordinates_dictionary:
             # Retrieving measured value
@@ -125,10 +124,10 @@ def composite_coordinates_dictionary(dictified_values):
         else:
             coordinates_dictionary[new_key] = {}
             # Retrieving measured value
-            coordinates_dictionary[new_key]["lat"] = lat
-            coordinates_dictionary[new_key]["lon"] = lon
 
     return coordinates_dictionary
+            dictionary[coordinates][northing] = entry.get(northing)
+            dictionary[coordinates][easting] = entry.get(easting)
             dictionary[coordinates][VV] = [entry[VV]]
             dictionary[coordinates][VH] = [entry[VH]]
 
@@ -150,10 +149,16 @@ def compare_coordinates_dictionaries(a, b):
     int
         **-1** if ``a > b``, **1** if ``a < b``, **0** if ``a == b``
     '''
-    if a["lat"] != b["lat"]:
-        return 1 if a["lat"] < b["lat"] else -1
-    elif a["lon"] != b["lon"]:
-        return 1 if a["lon"] < b["lon"] else -1
+    if not 'x' and 'y' in a and not 'a' and 'y' in b:
+        northing = 'latitude'
+        easting = 'longitude'
+    else:
+        northing = 'x'
+        easting = 'y'
+    if a[northing] != b[northing]:
+        return 1 if a[northing] < b[northing] else -1
+    elif a[easting] != b[easting]:
+        return 1 if a[easting] < b[easting] else -1
     else:
         return 0
 
@@ -162,15 +167,15 @@ def generate_coordinates(
         height,
         width,
         pixel_values,
-        unique_latitudes,
-        unique_longitudes,
+        unique_northings,
+        unique_eastings,
     ):
     """
     """
     coordinates = [
-                    [latitude, longitude]
-                    for longitude in unique_longitudes
-                    for latitude in unique_latitudes
+                    [northing, easting]
+                    for easting in unique_eastings
+                    for northing in unique_northings
     ]
     coordinates = numpy.array(coordinates).reshape(height, width, 2)
     return coordinates
