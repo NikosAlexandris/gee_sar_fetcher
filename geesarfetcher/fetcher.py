@@ -83,6 +83,43 @@ def fetch_composite_pixels(
         pass_direction,
         statistic,
     ):
+    """
+    Filters and aggregates Sentinel-1 products (S1_GRD ImageCollection) using
+    input parameters and return data as a dictionnary.
+
+    Parameters
+    ----------
+    list_of_coordinates :
+
+    start_date : str
+        str following the pattern ``'yyyy-mm-dd'`` describing the start date of
+        the time interval
+
+    end_date : str
+        str following the pattern ``'yyyy-mm-dd'`` describing the end date of
+        the time interval
+
+    geometry : ee.Geometry
+        Geometry object defining the area of process
+
+    scale : int
+        Scale parameters of the getRegion() function. Defaulting at ``20``,
+        change it to change the scale of the final data points. The highest,
+        the lower the spatial resolution. Should be at least ``10``.
+
+    crs : str, optional
+        Coordinate Reference System
+
+    pass_direction : str, optional
+        Defines the pass direction to set for the data retrieval process
+
+    statistic : str
+        The descriptive statistic as per Google Earth Engine's reducers.
+
+    Returns
+    -------
+    pixel_values : dict
+    """
     header = []
     composite_values = []
     for coordinates in tqdm(list_of_coordinates):
