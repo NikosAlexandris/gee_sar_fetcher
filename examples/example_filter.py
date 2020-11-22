@@ -1,4 +1,4 @@
-from devtools import debug
+# from devtools import debug
 import ee
 ee.Initialize()
 import datetime
@@ -119,10 +119,3 @@ values = [
           for idx in range(len(vv))
 ]
 # debug(locals())
-
-# Get Projection()
-#
-# If Projection != EPSG:4326:
-#    Use 'x' and 'y'
-# Else:
-#     Use geographic coordinates
