@@ -10,18 +10,20 @@ def list_coordinates(top_left, bottom_right, coordinates=None):
     return list_of_coordinates
 
 
-def latitudes_and_longitudes(pixel_values):
-    """Get latitude and longitude values from a (retrieved) dictionary of
+def northings_and_eastings(pixel_values):
+    """Get northing and easting values from a (retrieved) dictionary of
     'pixel_values'
     """
-    latitudes, longitudes = tuple(
-            zip(*[(pixel_value['lat'], pixel_value['lon'])
-                for pixel_value in pixel_values])
-    )
-    unique_latitudes = numpy.unique(latitudes)
-    unique_latitudes = unique_latitudes[::-1]  # why?
-    unique_longitudes = numpy.unique(longitudes)
-    return unique_latitudes, unique_longitudes
+    northings = []
+    eastings = []
+    for entry in pixel_values:
+        northing, easting = northing_and_easting(entry)
+        northings.append(entry[northing])
+        eastings.append(entry[easting])
+    unique_northings = numpy.unique(northings)
+    unique_northings = unique_northings[::-1]  # why?
+    unique_eastings = numpy.unique(eastings)
+    return unique_northings, unique_eastings
 
 
 def populate_coordinates_dictionary(dictified_values):
