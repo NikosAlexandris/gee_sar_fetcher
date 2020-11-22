@@ -20,10 +20,48 @@ def slice_region(
         pass_direction,
         statistic,
     ):
-    """Tries to retrieving the number of pixels per image. If the total number
-    of pixels exceeds the (currently) 5000 values, it slices the requested
-    region in subregions and returns a nested list of sub-bounding box
-    coordinates.
+    """Slices the requested region in subregions and returns a nested list of
+    sub-bounding box coordinates _if_ the total number of pixels inside the
+    requested region exceeds the maximum returned (currently 5000) values, it
+    slices
+
+    Parameters
+    ----------
+    top_left : tuple of float, optional
+        Top left coordinates (lon, lat) of the Region
+
+    bottom_right : tuple of float, optional
+        Bottom right coordinates (lon, lat) of the Region
+
+    coordinates : tuple of tuple of float or list of list of float, optional
+        If `top_left` and `bottom_right` are not specified, we expect
+        `coordinates` to be a list (resp. tuple) of the form ``[top_left,
+        bottom_right]`` (resp. ``(top_left, bottom_right)``)
+
+    start_date : datetime.datetime, optional
+        First date of the time interval
+
+    end_date : datetime.datetime, optional
+        Last date of the time interval
+
+    scale : int, optional
+        Scale parameters of the getRegion() function. Defaulting at ``20``,
+        change it to change the scale of the final data points. The highest,
+        the lower the spatial resolution. Should be at least ``10``.
+
+    crs : str, optional
+        Coordinate Reference System
+
+    pass_direction : str, optional
+        Defines the pass direction to set for the data retrieval process:
+            ``"ascending"`` (default) or ``"descending"``
+
+    statistic : str
+        The descriptive statistic as per Google Earth Engine's reducers.
+
+    Returns
+    -------
+    list_of_coordinates
     """
     list_of_coordinates = list_coordinates(top_left, bottom_right, coordinates)
     try:
