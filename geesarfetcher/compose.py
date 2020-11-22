@@ -135,22 +135,36 @@ def compose_sentinel1_data(
     ])
     vv = []
     for feature in values_vv['features']:
-        coordinates = feature['geometry']['coordinates']
         feature_property = feature['properties']
-        value_vv = feature_property.get(VV + '_' + statistic)
-        vv.extend([coordinates + [value_vv]])
+        value_vv = [feature_property.get(VV + '_' + statistic)]
+        coordinates_x = feature_property.get('x')
+        coordinates_y = feature_property.get('y')
+        coordinates_xy = [coordinates_x, coordinates_y]
+        coordinates = feature['geometry']['coordinates']
+        vv.extend([
+            coordinates
+            + coordinates_xy
+            + value_vv
+        ])
     vh = []
     for feature in values_vh['features']:
-        coordinates = feature['geometry']['coordinates']
         feature_property = feature['properties']
-        value_vh = feature_property.get(VH + '_' + statistic)
-        vh.extend([coordinates + [value_vh]])
+        value_vh = [feature_property.get(VH + '_' + statistic)]
+        coordinates_x = feature_property.get('x')
+        coordinates_y = feature_property.get('y')
+        coordinates_xy = [coordinates_x, coordinates_y]
+        coordinates = feature['geometry']['coordinates']
+        vh.extend([
+            coordinates
+            + coordinates_xy
+            + value_vh
+        ])
     values = [
-              vv[idx][:2] +
-              [start_date] +
-              [end_date] +
-              [vv[idx][2]] +
-              [vh[idx][2]]
-              for idx in range(len(vv))
+            vv[idx][:4] +
+            [start_date] +
+            [end_date] +
+            [vv[idx][4]] +
+            [vh[idx][4]]
+            for idx in range(len(vv))
     ]
     return (header, values)
