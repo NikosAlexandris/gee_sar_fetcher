@@ -52,8 +52,8 @@ def northings_and_eastings(pixel_values):
 
 
 def populate_coordinates_dictionary(dictified_values):
-    """Build a custom dictionary 'coordinates_dictionary' populated with values from
-    the 'dictified_values' dictionnary
+    """Build a custom dictionary 'coordinates_dictionary' populated with values
+    from the 'dictified_values' dictionnary
 
     Parameters
     ----------
@@ -94,9 +94,8 @@ def populate_coordinates_dictionary(dictified_values):
 
 
 def composite_coordinates_dictionary(dictified_values):
-    """
-    The dictionnary coordinates_dictionary' will be populated (or updated) with
-    values from the 'dictified_values' dictionnary
+    """A dictionnary will be populated (or updated) with values from the
+    'dictified_values' dictionnary
 
     Parameters
     ----------
@@ -104,8 +103,7 @@ def composite_coordinates_dictionary(dictified_values):
         A dictionary of Sentinel-1 values
 
     coordinates_dictionary :
-        A dictionnary matching to each coordinate key its values through time
-        as well as its timestamps.
+        A dictionnary matching to each coordinate key its values
 
     Returns
     -------
