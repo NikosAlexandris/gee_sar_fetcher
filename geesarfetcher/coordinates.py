@@ -140,9 +140,9 @@ def compare_coordinates_dictionaries(a, b):
     Parameters
     ----------
     a : dict
-        dict with keys ``"lon"`` and ``"lat"``
+        dict with keys ``"longitude"`` and ``"latitude"``
     b : dict
-        dict with keys ``"lon"`` and ``"lat"``
+        dict with keys ``"longitude"`` and ``"latitude"``
 
     Returns
     -------
