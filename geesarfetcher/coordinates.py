@@ -10,6 +10,29 @@ def list_coordinates(top_left, bottom_right, coordinates=None):
     return list_of_coordinates
 
 
+def northing_and_easting(dictionary):
+    """
+    Retrieve and return the northing and easting strings to be used as
+    dictionary keys
+
+    Parameters
+    ----------
+    dictionary : dict
+
+    Returns
+    -------
+    northing, easting : tuple
+
+    """
+    if not 'x' and 'y' in dictionary.keys():
+        northing = 'latitude'
+        easting = 'longitude'
+    else:
+        northing = 'x'
+        easting = 'y'
+    return northing, easting
+
+
 def northings_and_eastings(pixel_values):
     """Get northing and easting values from a (retrieved) dictionary of
     'pixel_values'
