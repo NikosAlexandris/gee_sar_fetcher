@@ -9,7 +9,7 @@ from .messages import VALUE_ERROR_NO_COORDINATES
 from .assertions import assert_inputs
 from .subregion import slice_region
 from .fetcher import fetch_composite_pixels
-from .coordinates import latitudes_and_longitudes
+from .coordinates import northings_and_eastings
 from .coordinates import generate_coordinates
 from .image import generate_image
 from .data_structure import strucure_data
@@ -59,6 +59,7 @@ def compose(
 
     statistic : str
         The descriptive statistic as per Google Earth Engine's reducers.
+
     n_jobs : int, optional
         Set the parallelisation factor (number of threads) for the GEE data
         access process. Set to 1 if no parallelisation required.
@@ -113,22 +114,22 @@ def compose(
         pass_direction=pass_direction,
         statistic=statistic,
     )
-    latitudes, longitudes = latitudes_and_longitudes(composite_pixel_values)
-    height = len(latitudes)
-    width = len(longitudes)
-    coordinates = generate_coordinates(
-            height=height,
-            width=width,
-            pixel_values=composite_pixel_values,
-            unique_latitudes=latitudes,
-            unique_longitudes=longitudes,
-    )
+    northings, eastings = northings_and_eastings(composite_pixel_values)
+    height = len(northings)
+    width = len(eastings)
     image = generate_image(
             height=height,
             width=width,
             pixel_values=composite_pixel_values,
-            unique_latitudes=latitudes,
-            unique_longitudes=longitudes,
+            unique_northings=northings,
+            unique_eastings=eastings,
+    )
+    coordinates = generate_coordinates(
+            height=height,
+            width=width,
+            pixel_values=composite_pixel_values,
+            unique_northings=northings,
+            unique_eastings=eastings,
     )
     return strucure_data(image, coordinates)
 
