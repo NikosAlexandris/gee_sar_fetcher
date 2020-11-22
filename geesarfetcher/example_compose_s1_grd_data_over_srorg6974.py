@@ -32,19 +32,22 @@ nsres=926.76896281
 # rows=250
 # cols=244
 # cells=61000
-nw_long=5.27500244
+#-
+nw_long=7.27500244
 nw_lat=49.98607421
+#-
 # ne_long=8.42194767
 # ne_lat=49.98607421
+#-
 se_long=8.07847752
-se_lat=47.90267285
+se_lat=48.90267285
+#-
 # sw_long=5.05987336
 # sw_lat=47.90267285
 # center_long=6.70481323
 # center_lat=48.94446807
 # ns_extent=231692.240703
 # ew_extent=225687.774287
-
 left, top, right, bottom = degrees_to_sinusoidal(
         west = nw_long,
         north = nw_lat,
@@ -81,10 +84,13 @@ sentinel_1_composite = compose(
 )
 
 # write out
-header = (',').join(['Latitude,Longitude,VV,VH'])
+##
+# Add 'timestamps'!
+##
+header = (',').join(['Northing,Easting,VV,VH,Start,End'])
 output = numpy.dstack((
     sentinel_1_composite['coordinates'],
-    sentinel_1_composite['stack']
+    sentinel_1_composite['stack'],
     )
 )
 filename = os.path.basename(__file__)
