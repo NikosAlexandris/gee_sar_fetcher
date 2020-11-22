@@ -120,6 +120,8 @@ def composite_coordinates_dictionary(dictified_values):
             dictionary[coordinates] = {}
             dictionary[coordinates][northing] = entry.get(northing)
             dictionary[coordinates][easting] = entry.get(easting)
+            dictionary[coordinates]['start_date'] = entry['start_date']
+            dictionary[coordinates]['end_date'] = entry['end_date']
             dictionary[coordinates][VV] = [entry[VV]]
             dictionary[coordinates][VH] = [entry[VH]]
     return dictionary
