@@ -3,6 +3,7 @@ from .constants import MEAN
 from .constants import VV
 from .constants import VH
 from .filter import filter_sentinel1_data
+import ee
 
 def count_composite_pixels(
         start_date,
@@ -97,7 +98,7 @@ def compose_sentinel1_data(
     values_vv = (filtered_sentinel1_data
             .select(VV)
             .reduce(statistic)
-            .addBands(ee.Image.pixelCoordinates(projection=SRORG6974))
+            .addBands(ee.Image.pixelCoordinates(projection=crs))
             .sample(
                 region=geometry,
                 scale=scale,
@@ -110,7 +111,7 @@ def compose_sentinel1_data(
     values_vh = (filtered_sentinel1_data
             .select(VH)
             .reduce(statistic)
-            .addBands(ee.Image.pixelCoordinates(projection=SRORG6974))
+            .addBands(ee.Image.pixelCoordinates(projection=crs))
             .sample(
                 region=geometry,
                 scale=scale,
