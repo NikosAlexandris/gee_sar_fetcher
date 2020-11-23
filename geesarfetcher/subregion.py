@@ -94,17 +94,14 @@ def slice_composite_region(
             statistic=statistic,
         )
         if top_left is not None:
-            list_of_coordinates = tile_coordinates(
-                    total_count_of_pixels=composite_pixels_count,
-                    coordinates=(top_left, bottom_right),
-                    max_gee=maximum_gee_elements,
-            )
+            bounding_box_coordinates=(top_left, bottom_right),
         else:
-            list_of_coordinates = tile_coordinates(
-                    total_count_of_pixels=composite_pixels_count,
-                    coordinates=coordinates,
-                    max_gee=maximum_gee_elements,
-            )
+            bounding_box_coordinates=coordinates,
+        list_of_coordinates = tile_coordinates(
+                total_count_of_pixels=composite_pixels_count,
+                coordinates=bounding_box_coordinates,
+                max_gee=maximum_gee_elements,
+        )
     print(f'Region sliced in '
           f'{len(list_of_coordinates)} subregions.'
     )
