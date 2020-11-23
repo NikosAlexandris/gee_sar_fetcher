@@ -61,22 +61,14 @@ def fetch():
     # get northings, eastings
     northings, eastings = northings_and_eastings(composite_pixel_values)
 
-    # get image height, width
-    height = len(northings)
-    width = len(eastings)
-
     # get image data structure
     image = generate_image(
-            height=height,
-            width=width,
             pixel_values=composite_pixel_values,
             unique_northings=northings,
             unique_eastings=eastings,
     )
     # get coordinates
     coordinates = generate_coordinates(
-            height=height,
-            width=width,
             pixel_values=composite_pixel_values,
             unique_northings=northings,
             unique_eastings=eastings,
@@ -205,19 +197,15 @@ def compose(
         pass_direction=pass_direction,
         statistic=statistic,
     )
-    northings, eastings = northings_and_eastings(composite_pixel_values)
-    height = len(northings)
-    width = len(eastings)
+    northings, eastings = northings_and_eastings(c
+            omposite_pixel_values
+    )
     image = generate_composite_image(
-            height=height,
-            width=width,
             pixel_values=composite_pixel_values,
             unique_northings=northings,
             unique_eastings=eastings,
     )
     coordinates = generate_coordinates(
-            height=height,
-            width=width,
             pixel_values=composite_pixel_values,
             unique_northings=northings,
             unique_eastings=eastings,
