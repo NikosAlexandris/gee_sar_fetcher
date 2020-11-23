@@ -2,6 +2,7 @@ from .constants import VV
 from .constants import VH
 
 def strucure_data(
+def strucure_composite_data(
         image,
         coordinates,
         timestamps,

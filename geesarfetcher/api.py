@@ -132,5 +132,5 @@ def compose(
             unique_eastings=eastings,
     )
     timestamps = [start_date, end_date]
-    return strucure_data(image, coordinates, timestamps)
+    return strucure_composite_data(image, coordinates, timestamps)
 
