@@ -14,6 +14,84 @@ from .coordinates import generate_coordinates
 from .image import generate_image
 from .data_structure import strucure_data
 
+def fetch():
+    """This function performs the following steps:
+        - assert inputs
+        - get date intervals
+        - set pass direction
+        - tile bounding box coordinates
+        - fetch data for tiles and date intervals
+        - get timestamps
+        - get northings, eastings
+        - get image height, width
+        - get coordinates
+        - get image data structure
+        - return data structure
+    """
+    # assert inputs
+    assert_inputs(
+            coordinates=coordinates,
+            top_left=top_left,
+            bottom_right=bottom_right,
+            start_date=start_date,
+            end_date=end_date,
+    )
+
+    # get date intervals
+    date_intervals = get_date_interval_array(start_date, end_date)
+
+    # set pass direction
+    pass_direction = ASCENDING if ascending else DESCENDING
+
+    # tile bounding box coordinates
+    list_of_coordinates = slice_region(
+        top_left=top_left,
+        bottom_right=bottom_right,
+        coordinates=coordinates,
+        start_date=start_date,
+        end_date=end_date,
+        scale=scale,
+        crs=crs,
+        pass_direction=pass_direction,
+    )
+
+    # fetch data for tiles and date intervals
+    # ------------------------------------------------------------- REFACTOR ---
+
+    # get northings, eastings
+    northings, eastings = northings_and_eastings(composite_pixel_values)
+
+    # get image height, width
+    height = len(northings)
+    width = len(eastings)
+
+    # get image data structure
+    image = generate_image(
+            height=height,
+            width=width,
+            pixel_values=composite_pixel_values,
+            unique_northings=northings,
+            unique_eastings=eastings,
+    )
+    # get coordinates
+    coordinates = generate_coordinates(
+            height=height,
+            width=width,
+            pixel_values=composite_pixel_values,
+            unique_northings=northings,
+            unique_eastings=eastings,
+    )
+    # get timestamps
+    timestamps = np.unique(
+            [
+                datetime.fromtimestamp(pixel_values[i]['timestamps'][j]).date()
+                for i in range(len(pixel_values))
+                for j in range(len(pixel_values[i]['timestamps']))
+            ]
+    )
+    # return data structure
+    return strucure_data(image, coordinates, timestamps)
+
 
 def compose(
     top_left=None,
@@ -28,7 +106,20 @@ def compose(
     n_jobs: int = 1,
 ):
     '''Fetches a composite of SAR data in the form of a dictionnary with image
-    data as well as timestamps
+    data as well as timestamps.
+
+        The function performs the following steps:
+
+        - assert inputs
+        - set pass direction
+        - tile bounding box coordinates
+        - fetch data for tiles
+        - get timestamps
+        - get northings, eastings
+        - get image height, width
+        - get coordinates
+        - get image data structure
+        - return data structure
 
     Parameters
     ----------
