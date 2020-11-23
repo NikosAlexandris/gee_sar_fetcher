@@ -1,7 +1,28 @@
 from .constants import VV
 from .constants import VH
 
-def strucure_data(
+def strucure_data():
+    """
+    """
+    return {
+        "stack": image,
+        "timestamps": timestamps,
+        "coordinates": coordinates,
+        "metadata": {
+            "stack": {
+                "axis_0": "height",
+                "axis_1": "width",
+                "axis_2": "polarisations (0:VV, 1:VH)",
+                "axis_3": "timestamps"
+            },
+            "coordinates": {
+                "axis_0": "height",
+                "axis_1": "width",
+                "axis_2": "0:latitude; 1:longitude",
+            }
+        }
+    }
+
 def strucure_composite_data(
         image,
         coordinates,
