@@ -46,21 +46,21 @@ def generate_image(
 
 
 def generate_composite_image(
-        height,
-        width,
         pixel_values,
         unique_northings,
         unique_eastings,
     ):
     """
     """
+    height = len(unique_northings)
+    width = len(unique_eastings)
     northings_dictionary = {
             unique_northings[i]: i
-            for i in range(len(unique_northings))
+            for i in range(height)
     }
     eastings_dictionary = {
             unique_eastings[i]: i
-            for i in range(len(unique_eastings))
+            for i in range(width)
     }
     image = numpy.full((height, width, 2), fill_value=numpy.nan)
     print(f'Generating image of shape (height x width) {height, width}')
