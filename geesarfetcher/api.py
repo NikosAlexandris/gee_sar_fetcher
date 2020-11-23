@@ -115,22 +115,15 @@ def compose(
         statistic=statistic,
     )
     northings, eastings = northings_and_eastings(composite_pixel_values)
-    height = len(northings)
-    width = len(eastings)
     image = generate_image(
-            height=height,
-            width=width,
             pixel_values=composite_pixel_values,
             unique_northings=northings,
             unique_eastings=eastings,
     )
     coordinates = generate_coordinates(
-            height=height,
-            width=width,
             pixel_values=composite_pixel_values,
             unique_northings=northings,
             unique_eastings=eastings,
     )
     timestamps = [start_date, end_date]
     return strucure_data(image, coordinates, timestamps)
-

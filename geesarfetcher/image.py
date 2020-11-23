@@ -6,14 +6,14 @@ from .coordinates import northing_and_easting
 
 
 def generate_image(
-        height,
-        width,
         pixel_values,
         unique_northings,
         unique_eastings,
     ):
     """
     """
+    height = len(unique_northings)
+    width = len(unique_eastings)
     northings_dictionary = {
             unique_northings[i]: i
             for i in range(len(unique_northings))

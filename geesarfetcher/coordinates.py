@@ -159,14 +159,14 @@ def compare_coordinates_dictionaries(a, b):
 
 
 def generate_coordinates(
-        height,
-        width,
         pixel_values,
         unique_northings,
         unique_eastings,
     ):
     """
     """
+    height = len(unique_northings)
+    width = len(unique_eastings)
     coordinates = [
                     [northing, easting]
                     for easting in unique_eastings
