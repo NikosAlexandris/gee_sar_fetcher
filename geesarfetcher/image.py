@@ -24,6 +24,7 @@ def generate_image(
     }
     image = numpy.full((height, width, 2), fill_value=numpy.nan)
     print(f'Generating image of shape (height x width) {height, width}')
+def generate_composite_image(
     for pixel_value in tqdm(pixel_values):
         northing, easting = northing_and_easting(pixel_value)
         x = northings_dictionary[pixel_value[northing]]

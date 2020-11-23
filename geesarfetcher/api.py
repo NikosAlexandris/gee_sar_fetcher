@@ -117,7 +117,7 @@ def compose(
     northings, eastings = northings_and_eastings(composite_pixel_values)
     height = len(northings)
     width = len(eastings)
-    image = generate_image(
+    image = generate_composite_image(
             height=height,
             width=width,
             pixel_values=composite_pixel_values,
