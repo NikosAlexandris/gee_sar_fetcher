@@ -18,6 +18,7 @@ def slice_region(
         scale,
         crs,
         pass_direction,
+def slice_composite_region(
         statistic,
     ):
     """Slices the requested region in subregions and returns a nested list of

@@ -94,7 +94,7 @@ def compose(
             end_date=end_date,
     )
     pass_direction = ASCENDING if ascending else DESCENDING
-    list_of_coordinates = slice_region(
+    list_of_coordinates = slice_composite_region(
         top_left=top_left,
         bottom_right=bottom_right,
         coordinates=coordinates,
