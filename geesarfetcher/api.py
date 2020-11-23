@@ -1,6 +1,7 @@
 import ee
 import warnings
 from datetime import datetime, date, timedelta
+import os
 
 from .constants import ASCENDING, DESCENDING
 from .constants import VV, VH
@@ -13,6 +14,13 @@ from .coordinates import northings_and_eastings
 from .coordinates import generate_coordinates
 from .image import generate_image
 from .data_structure import strucure_data
+
+warnings.simplefilter(action="ignore")
+warnings.filterwarnings('ignore')
+
+if os.environ.get('READTHEDOCS') == None:
+    ee.Initialize()
+
 
 def fetch():
     """This function performs the following steps:
