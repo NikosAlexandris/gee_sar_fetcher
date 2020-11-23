@@ -5,6 +5,7 @@ from .constants import VH
 from .filter import filter_sentinel1_data
 import ee
 
+
 def count_composite_pixels(
         start_date,
         end_date,
@@ -47,6 +48,7 @@ def count_composite_pixels(
             .getInfo()
     )
     return max(vv_pixel_count, vh_pixel_count)
+
 
 def compose_sentinel1_data(
         start_date,
@@ -123,6 +125,7 @@ def compose_sentinel1_data(
             )
             .getInfo()
     )
+    # northing, easting = northing_and_easting
     header = ([
                 'longitude',
                 'latitude',
