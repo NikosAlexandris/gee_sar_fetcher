@@ -74,6 +74,50 @@ def fetch_sentinel1_data(
     return (val_header, val)
 
 
+def fetch_sentinel1_pixels(
+    ):
+    """
+    """
+    # ------------------------------------------------------------- REFACTOR ---
+    def _get_zone_between_dates(start_date, end_date, polygon, scale, crs, pass_direction):
+        try:
+            val_header, val = fetch_sentinel1_data(
+                start_date=start_date,
+                end_date=end_date,
+                geometry=polygon,
+                pass_direction=pass_direction,
+                scale=scale,
+                crs=crs,
+            )
+            vals.extend(val)
+
+            if len(headers) == 0:
+                headers.extend(val_header)
+        except Exception as e:
+            pass
+
+    for coordinates in tqdm(list_of_coordinates):
+        vals = []
+        headers = []
+        polygon = ee.Geometry.Polygon([coordinates])
+        # Fill vals with values.
+        # TODO: Evaluate eventuality to remove shared memory requirement and to exploit automatic list building from Joblib
+        Parallel(n_jobs=n_jobs, require='sharedmem')(delayed(_get_zone_between_dates)(sub_start_date, sub_end_date, polygon, scale, crs, pass_direction) for sub_start_date, sub_end_date in date_intervals)
+
+        dictified_vals = [dict(zip(headers, values)) for values in vals]
+        per_coord_dict = populate_coordinates_dictionary(dictified_values=dictified_vals)
+
+    # per_coord_dict is a dictionnary matching to each coordinate key its values through time as well as its timestamps
+
+    ##############################
+    ## BUILDING TEMPORAL IMAGES ##
+    ##############################
+
+    pixel_values = [per_coord_dict[k] for k in per_coord_dict.keys()]
+    coordinates_dictionaries_comparison = cmp_to_key(compare_coordinates_dictionaries)
+    pixel_values.sort(key=coordinates_dictionaries_comparison)  # sorting pixels by latitude then longitude
+    # ------------------------------------------------------------- REFACTOR ---
+
 def fetch_composite_pixels(
         list_of_coordinates,
         start_date,
