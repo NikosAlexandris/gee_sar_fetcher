@@ -64,25 +64,25 @@ def tile_coordinates(total_count_of_pixels, coordinates, max_gee=MAX_GEE_PIXELS_
     assert(len(coordinates) == 2 or len(coordinates) == 5)
 
     if len(coordinates) == 2:
-        tmp_c = make_polygon(coordinates[0], coordinates[1])
+        corner_coordinates = make_polygon(coordinates[0], coordinates[1])
     else:
-        tmp_c = coordinates
+        corner_coordinates = coordinates
 
     if (total_count_of_pixels < max_gee):
-        return [tmp_c]
+        return [corner_coordinates]
 
     # The coordinate polygon will be tiled in `grid_length * grid_length` sub-Polygons
     grid_length = int(math.ceil(math.sqrt(total_count_of_pixels/max_gee)))
-    min_longitude = min([xy[0] for xy in tmp_c])
-    max_longitude = max([xy[0] for xy in tmp_c])
-    min_latitude = min([xy[1] for xy in tmp_c])
-    max_latitude = max([xy[1] for xy in tmp_c])
+    min_longitude = min([xy[0] for xy in corner_coordinates])
+    max_longitude = max([xy[0] for xy in corner_coordinates])
+    min_latitude = min([xy[1] for xy in corner_coordinates])
+    max_latitude = max([xy[1] for xy in corner_coordinates])
     original_polygon_width = max_longitude - min_longitude
     original_polygon_height = max_latitude - min_latitude
     tile_width = original_polygon_width / grid_length
     tile_height = original_polygon_height / grid_length
-    origin_longitude = tmp_c[0][0]
-    origin_latitude = tmp_c[0][1]
+    origin_longitude = corner_coordinates[0][0]
+    origin_latitude = corner_coordinates[0][1]
     list_of_coordinates = []
     for row in range(grid_length):
         for column in range(grid_length):
