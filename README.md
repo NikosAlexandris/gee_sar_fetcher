@@ -52,7 +52,7 @@ compose(
 )  # returns a dictionary with access to (meta-)data through the keywords 'stack', 'coordinates' and 'timestamps' 
 ```
 or aggregating pixel values over another projection system (i.e. MODIS' Sinusoidal grid) and using multiple CPUs (i.e. `n_jobs=30`):
-```
+```python
 from geesarfetcher.api import compose
 import datetime
 
