@@ -89,9 +89,9 @@ def tile_coordinates(total_count_of_pixels, coordinates, max_gee=MAX_GEE_PIXELS_
             list_of_coordinates.append(
                 make_polygon(
                     [origin_longitude + row * tile_width,
-                        origin_latitude + column * tile_height],
-                    [origin_longitude + (row+1) * tile_width,
-                        origin_latitude + (column+1) * tile_height]
+                        origin_latitude - column * tile_height],
+                    [origin_longitude + (row + 1) * tile_width,
+                        origin_latitude - (column + 1) * tile_height]
                 )
             )
     return list_of_coordinates
