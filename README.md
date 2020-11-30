@@ -51,6 +51,23 @@ compose(
     n_jobs=30,
 )  # returns a dictionary with access to (meta-)data through the keywords 'stack', 'coordinates' and 'timestamps' 
 ```
+or aggregating pixel values over another projection system (i.e. MODIS' Sinusoidal grid) and using multiple CPUs (i.e. `n_jobs=30`):
+```
+from geesarfetcher.api import compose
+import datetime
+
+composite = compose(
+    top_left=top_left,
+    bottom_right=bottom_right,
+    start_date=datetime.datetime(2019, 6, 1),
+    end_date=datetime.datetime(2019, 6, 30),
+    ascending=True,
+    scale=nsres,
+    crs=SRORG6974,
+    statistic=statistic,
+    n_jobs=30,
+)
+```
 
 ## Installation
 Access to Google Earth Engine is conditioned by the obtention of a [GEE account](https://earthengine.google.com/).
