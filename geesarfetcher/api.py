@@ -13,6 +13,18 @@ from .coordinates import northings_and_eastings
 from .coordinates import generate_coordinates
 from .image import generate_image
 from .data_structure import strucure_data
+from .writer import DATA_TYPES
+from .writer import DATA_TYPES_EXTENDED
+from .writer import DELIMITER
+from .writer import FIELD_FORMAT
+from .writer import FIELD_FORMATS
+from .writer import CSV_HEADER
+from .writer import CSV_HEADER_EXTENDED
+from .writer import define_interval
+from .writer import structure_array
+from .writer import build_output_filename
+from .writer import stack_composite_data
+from numpy import savetxt
 
 
 def compose(
@@ -127,3 +139,48 @@ def compose(
     )
     timestamps = [start_date, end_date]
     return strucure_data(image, coordinates, timestamps)
+
+
+def write_to_csv(
+        composite_data,
+        image_collection,
+        location,
+        interval,
+        statistic,
+        structured: bool = False,
+    ):
+    """
+    """
+    filename = build_output_filename(
+            image_collection,
+            location,
+            interval,
+            statistic,
+    )
+    composite_data_stack = stack_composite_data(composite_data)
+    if structured:
+        start_date=interval[0].strftime("%Y%m%d")
+        end_date=interval[1].strftime("%Y%m%d")
+        composite_data_stack = structure_array(
+                array=composite_data_stack,
+                data_types=DATA_TYPES,
+                start_date=start_date,
+                end_date=end_date,
+        )
+        savetxt(
+                fname=f'{filename}.csv',
+                X=composite_data_stack,
+                fmt=FIELD_FORMATS,
+                delimiter=DELIMITER,
+                header=CSV_HEADER_EXTENDED,
+                comments='',
+        )
+    else:
+        savetxt(
+                fname=f'{filename}.csv',
+                X=composite_data_stack,
+                fmt=FIELD_FORMAT,
+                delimiter=DELIMITER,
+                header=CSV_HEADER,
+                comments='',
+        )
