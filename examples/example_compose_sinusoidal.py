@@ -6,7 +6,7 @@ import datetime
 from geesarfetcher.sinusoidal import degrees_to_sinusoidal
 from geesarfetcher.api import compose
 import numpy
-from numpy import savetxt
+from helpers import write_to_csv
 
 # constants
 SENTINEL1_COLLECTION_ID = 'COPERNICUS/S1_GRD'
@@ -84,21 +84,11 @@ sentinel_1_composite = compose(
 )
 
 # write out
-##
-# Add 'timestamps'!
-##
-header = (',').join(['Northing,Easting,VV,VH,Start,End'])
-output = numpy.dstack((
-    sentinel_1_composite['coordinates'],
-    sentinel_1_composite['stack'],
-    )
-)
-filename = os.path.basename(__file__)
-savetxt(
-        fname=f'{filename}.csv',
-        X=output[0],
-        fmt='%.18f',
-        delimiter=',',
-        header=header,
-        comments=''
+write_to_csv(
+        composite_data=composite,
+        image_collection=image_collection,
+        location=location,
+        interval=interval,
+        statistic=statistic,
+        structured=False,
 )
