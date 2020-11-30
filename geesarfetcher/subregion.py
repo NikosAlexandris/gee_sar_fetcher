@@ -1,4 +1,3 @@
-from devtools import debug
 from .coordinates import list_coordinates
 import ee
 from .compose import count_composite_pixels
