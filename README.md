@@ -4,7 +4,7 @@ An easy-to-use Python library to download SAR GRD imagery from Google Earth Engi
 
 **Note**
 
-> This is an **experimental fork** of the original pacakge `geesarfetcher`.
+> THIS IS AN **experimental fork** of the original pacakge `geesarfetcher`.
 > The aim here is to provide an API to retrieve composite images (in common Remote Sensing terms: aggregate a time series) from the `S1_GRD` image collection.
 > For example, the mean of SAR acquisitions over a specific region and period of time.
 
@@ -50,6 +50,23 @@ compose(
     statistic='mean',
     n_jobs=30,
 )  # returns a dictionary with access to (meta-)data through the keywords 'stack', 'coordinates' and 'timestamps' 
+```
+or aggregating pixel values over another projection system (i.e. MODIS' Sinusoidal grid) and using multiple CPUs (i.e. `n_jobs=30`):
+```python
+from geesarfetcher.api import compose
+import datetime
+
+composite = compose(
+    top_left=top_left,
+    bottom_right=bottom_right,
+    start_date=datetime.datetime(2019, 6, 1),
+    end_date=datetime.datetime(2019, 6, 30),
+    ascending=True,
+    scale=nsres,
+    crs=SRORG6974,
+    statistic=statistic,
+    n_jobs=30,
+)
 ```
 
 ## Installation
