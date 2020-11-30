@@ -1,4 +1,4 @@
-from helpers import define_interval
+from geesarfetcher.writer import define_interval
 import datetime
 
 # where?
