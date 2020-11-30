@@ -1,8 +1,6 @@
 import datetime
 from datetime import timedelta
 import numpy
-from pathlib import Path
-from numpy import savetxt
 
 DATA_TYPES = numpy.dtype([('x', numpy.float32), ('y', numpy.float32),('VV', numpy.float32), ('VH', numpy.float32)])
 DATA_TYPES_EXTENDED = [('Start', (numpy.str_, 8)), ('End', (numpy.str_, 8))]
@@ -94,7 +92,6 @@ def build_output_filename(
         start_date,
         end_date,
     ])
-    # filename = Path(__file__).stem
     filename = '_'.join([
             image_collection,
             where,
