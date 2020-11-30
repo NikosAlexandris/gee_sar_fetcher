@@ -9,12 +9,7 @@ north=5556366.58391489
 south=5327454.6501018
 east=602106.99615688
 west=377344.171763875
-where='_'.join([
-    str(west),
-    str(north),
-    str(east),
-    str(south)
-])
+where = f'{str(west)}_{str(north)}_{str(east)}_{str(south)}'
 top_left = [west, north]
 bottom_right = [east, south]
 locations = [ (top_left, bottom_right) ]
