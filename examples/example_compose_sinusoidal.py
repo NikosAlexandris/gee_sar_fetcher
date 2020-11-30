@@ -1,12 +1,11 @@
 # imports
-import os
 import ee
 ee.Initialize()
 import datetime
 from geesarfetcher.sinusoidal import degrees_to_sinusoidal
 from geesarfetcher.api import compose
-import numpy
 from helpers import write_to_csv
+from where_when_what import image_collection
 
 # constants
 SENTINEL1_COLLECTION_ID = 'COPERNICUS/S1_GRD'
@@ -56,6 +55,7 @@ left, top, right, bottom = degrees_to_sinusoidal(
 )
 top_left = [left, top]
 bottom_right = [right, bottom]
+location = (top_left, bottom_right)
 #-
 #extent = (left, bottom, right, top)
 #geometry = ee.Geometry.Rectangle(
@@ -67,11 +67,12 @@ bottom_right = [right, bottom]
 
 # when?
 start_date = datetime.datetime(2019, 6, 1)
-end_date = datetime.datetime(2019, 6, 30)
+end_date = datetime.datetime(2019, 6, 6)
+interval = (start_date, end_date)
 
 # compose
 statistic = 'mean'
-sentinel_1_composite = compose(
+composite = compose(
     top_left=top_left,
     bottom_right=bottom_right,
     start_date=start_date,
