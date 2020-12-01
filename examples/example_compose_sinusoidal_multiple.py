@@ -9,6 +9,15 @@ from where_when_what import statistics
 from geesarfetcher.api import compose
 from geesarfetcher.api import write_to_csv
 
+print(
+        'Input parameters\n'
+        f' Image collection: {image_collection}\n'
+        f' Location:         {locations}\n'
+        f' Projection:       {SRORG6974}\n'
+        f' Resolution:       {nsres}\n'
+        f' Intervals:        {intervals}\n'
+        f' Statistics:       {statistics}\n'
+)
 
 print(f'Composing Sentinel-1 SAR data over')
 # for dataset in DATASETS:
