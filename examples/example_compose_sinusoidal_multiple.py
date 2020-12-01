@@ -26,30 +26,34 @@ for location in locations:
     top_left = location[0]
     bottom_right = location[1]
 
-    for interval in intervals:
-        print(f'  Interval: {interval}')
-        start_date = interval[0]
-        end_date = interval[1]
+    for ascending in [True, False]:
+        print(f'  Ascending pass direction: {ascending}')
 
-        for statistic in statistics:
-            print(f'  Statistic: {statistic}')
-            composite = compose(
-                    top_left=top_left,
-                    bottom_right=bottom_right,
-                    start_date=start_date,
-                    end_date=end_date,
-                    ascending=True,
-                    scale=nsres,
-                    crs=SRORG6974,
-                    statistic=statistic,
-                    n_jobs=30,
-            )
-            write_to_csv(
-                    composite_data=composite,
-                    image_collection=image_collection,
-                    location=location,
-                    interval=interval,
-                    statistic=statistic,
-                    structured=True,
-            )
-            print('\n')
+        for interval in intervals:
+            print(f'  Interval: {interval}')
+            start_date = interval[0]
+            end_date = interval[1]
+
+            for statistic in statistics:
+                print(f'  Statistic: {statistic}')
+                composite = compose(
+                        top_left=top_left,
+                        bottom_right=bottom_right,
+                        start_date=start_date,
+                        end_date=end_date,
+                        ascending=ascending,
+                        scale=nsres,
+                        crs=SRORG6974,
+                        statistic=statistic,
+                        n_jobs=30,
+                )
+                write_to_csv(
+                        composite_data=composite,
+                        image_collection=image_collection,
+                        location=location,
+                        ascending=ascending,
+                        interval=interval,
+                        statistic=statistic,
+                        structured=True,
+                )
+                print('\n')

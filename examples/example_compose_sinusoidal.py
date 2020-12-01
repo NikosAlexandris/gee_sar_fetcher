@@ -4,6 +4,7 @@ import datetime
 from geesarfetcher.sinusoidal import degrees_to_sinusoidal
 from geesarfetcher.api import compose
 from geesarfetcher.api import write_to_csv
+from where_when_what import SRORG6974
 from where_when_what import image_collection
 
 # where?
@@ -62,6 +63,7 @@ location = (top_left, bottom_right)
 #        geodesic=False
 #)
 ##-
+ascending = True
 
 # when?
 start_date = datetime.datetime(2019, 6, 1)
@@ -75,7 +77,7 @@ composite = compose(
     bottom_right=bottom_right,
     start_date=start_date,
     end_date=end_date,
-    ascending=True,
+    ascending=ascending,
     scale=nsres,
     crs=SRORG6974,
     statistic=statistic,
@@ -87,6 +89,7 @@ write_to_csv(
         composite_data=composite,
         image_collection=image_collection,
         location=location,
+        ascending=ascending,
         interval=interval,
         statistic=statistic,
         structured=False,
