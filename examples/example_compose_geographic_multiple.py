@@ -1,4 +1,3 @@
-from where_when_what import SRORG6974
 from where_when_what import nsres
 from where_when_what import locations
 from where_when_what import intervals
@@ -29,7 +28,6 @@ for location in locations:
                     end_date=end_date,
                     ascending=True,
                     scale=nsres,
-                    crs=SRORG6974,
                     statistic=statistic,
                     n_jobs=30,
             )
