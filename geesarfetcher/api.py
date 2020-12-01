@@ -145,6 +145,7 @@ def write_to_csv(
         composite_data,
         image_collection,
         location,
+        ascending,
         interval,
         statistic,
         structured: bool = False,
@@ -154,6 +155,7 @@ def write_to_csv(
     filename = build_output_filename(
             image_collection,
             location,
+            ascending,
             interval,
             statistic,
     )

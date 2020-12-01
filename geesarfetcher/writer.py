@@ -1,6 +1,8 @@
 import datetime
 from datetime import timedelta
 import numpy
+from .constants import ASCENDING, DESCENDING
+
 
 DATA_TYPES = numpy.dtype([('x', numpy.float32), ('y', numpy.float32),('VV', numpy.float32), ('VH', numpy.float32)])
 DATA_TYPES_EXTENDED = [('Start', (numpy.str_, 8)), ('End', (numpy.str_, 8))]
@@ -74,6 +76,7 @@ def structure_array(array, data_types, start_date, end_date):
 def build_output_filename(
         image_collection,
         location,
+        ascending,
         interval,
         statistic,
     ):
@@ -85,6 +88,7 @@ def build_output_filename(
             str(location[1][0]),
             str(location[1][1]),
     ])
+    direction = ASCENDING if ascending else DESCENDING
     start_date=interval[0].strftime("%Y%m%d")
     end_date=interval[1].strftime("%Y%m%d")
     when='_'.join([
@@ -94,6 +98,7 @@ def build_output_filename(
     filename = '_'.join([
             image_collection,
             where,
+            direction,
             when,
             statistic,
     ])
