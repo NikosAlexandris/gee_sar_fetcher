@@ -37,9 +37,8 @@ def define_interval(
         A tuple of datetime.datetime objects indicating the start and the end
         of an interval
     """
-    origin_date = datetime.datetime(2019, 6, 13)
-    start = origin_date - timedelta(days=3)
-    end = origin_date + timedelta(days=4)
+    start = start_date - timedelta(days=days_pre)
+    end = start_date + timedelta(days=days_post)
     return (start, end)
 
 
