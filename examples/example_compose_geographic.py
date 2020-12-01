@@ -1,4 +1,3 @@
-from devtools import debug
 import ee
 ee.Initialize()
 import datetime
@@ -33,7 +32,6 @@ composite = compose(
 )
 
 # write out
-debug(locals())
 write_to_csv(
         composite_data=composite,
         image_collection=image_collection,
