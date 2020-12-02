@@ -1,4 +1,5 @@
 # GEE SAR Fetcher
+
 An easy-to-use Python library to download SAR GRD imagery from Google Earth Engine.
 
 
@@ -70,6 +71,7 @@ composite = compose(
 ```
 
 ## Installation
+
 Access to Google Earth Engine is conditioned by the obtention of a [GEE account](https://earthengine.google.com/).
 Once created, you can install the **geesarfetcher** API and register an identifying token for your Python working environment using the following commands:
 ```
@@ -83,4 +85,5 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 Please make sure to update tests as appropriate.
 
 ## License
+
 [MIT](https://choosealicense.com/licenses/mit/)
